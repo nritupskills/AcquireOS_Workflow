@@ -1,0 +1,1743 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AcquireOS AI™ MVP Unified Dashboard</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0
+    }
+
+    :root {
+      --c-gold: #C9913A;
+      --c-gold-light: #F5E8D0;
+      --c-gold-dark: #8B5E1A;
+      --c-teal: #1A7F6E;
+      --c-teal-light: #D0EEEA;
+      --c-teal-dark: #0D4E43;
+      --c-blue: #1B5FAB;
+      --c-blue-light: #D5E4F5;
+      --c-blue-dark: #0D3A6E;
+      --c-slate: #3D4E68;
+      --c-slate-light: #E6EAF0;
+      --c-red: #B03030;
+      --c-red-light: #F5DADA;
+      --c-purple: #5B3D9E;
+      --c-purple-light: #E8E2F7;
+
+      --color-background-primary: #ffffff;
+      --color-background-secondary: #f8f9fa;
+      --color-background-tertiary: #f1f3f5;
+      --color-background-success: #1A7F6E;
+      --color-text-primary: #111827;
+      --color-text-secondary: #4b5563;
+      --color-text-tertiary: #6b7280;
+      --color-text-success: #ffffff;
+      --color-text-danger: #ef4444;
+      --color-border-secondary: #e5e7eb;
+      --color-border-tertiary: #f3f4f6;
+      --color-border-success: #1A7F6E;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --color-background-primary: #111827;
+        --color-background-secondary: #1f2937;
+        --color-background-tertiary: #374151;
+        --color-text-primary: #f9fafb;
+        --color-text-secondary: #d1d5db;
+        --color-text-tertiary: #9ca3af;
+        --color-border-secondary: #4b5563;
+        --color-border-tertiary: #374151;
+
+        --c-gold-light: #423013;
+        --c-gold-dark: #F5E8D0;
+        --c-teal-light: #0e3630;
+        --c-teal-dark: #D0EEEA;
+        --c-blue-light: #102844;
+        --c-blue-dark: #D5E4F5;
+        --c-red-light: #4a1515;
+        --c-red: #F5DADA;
+        --c-purple-light: #281b45;
+        --c-purple: #E8E2F7;
+      }
+    }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--color-background-primary);
+      color: var(--color-text-primary);
+      line-height: 1.5;
+    }
+
+    .root {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 2rem 1rem;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 0.5px solid var(--color-border-tertiary)
+    }
+
+    .logo {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--c-gold);
+      background: var(--c-gold-light);
+      padding: 6px 12px;
+      border-radius: 6px;
+      white-space: nowrap
+    }
+
+    .header-text h1 {
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--color-text-primary)
+    }
+
+    .header-text p {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      margin-top: 2px
+    }
+
+    .badges {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-left: auto;
+      align-items: flex-end;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .badge {
+      font-size: 11px;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 20px;
+      white-space: nowrap
+    }
+
+    .badge-gold {
+      background: var(--c-gold-light);
+      color: var(--c-gold-dark)
+    }
+
+    .badge-teal {
+      background: var(--c-teal-light);
+      color: var(--c-teal-dark)
+    }
+
+    /* SYNC DOT */
+    .sync-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sync-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-background-success);
+      flex-shrink: 0
+    }
+
+    .sync-dot.loading {
+      background: #FAC775
+    }
+
+    .sync-dot.error {
+      background: #F09595
+    }
+
+    .sync-label {
+      font-size: 11px;
+      color: var(--color-text-tertiary)
+    }
+
+    /* PHASE HEADER */
+    .phase {
+      margin-bottom: 24px
+    }
+
+    /* DAILY RHYTHM STRIP */
+    .rhythm-strip {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 28px;
+      background: var(--color-background-secondary);
+      border-radius: 10px;
+      padding: 12px 16px;
+      align-items: center;
+      flex-wrap: wrap
+    }
+
+    .rhythm-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--color-text-secondary)
+    }
+
+    .rhythm-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0
+    }
+
+    .rhythm-sep {
+      color: var(--color-border-secondary);
+      font-size: 14px;
+      user-select: none
+    }
+
+    .rhythm-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: var(--color-text-tertiary);
+      margin-right: 4px
+    }
+
+    /* WORKFLOW MODULES */
+    .workflow-flow {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      margin-bottom: 28px
+    }
+
+    .flow-row {
+      display: flex;
+      align-items: stretch;
+      position: relative
+    }
+
+    .flow-connector {
+      width: 2px;
+      background: var(--color-border-tertiary);
+      margin: 0 auto;
+      min-height: 8px
+    }
+
+    .flow-modules {
+      display: flex;
+      gap: 8px;
+      flex: 1;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .module-card {
+      flex: 1;
+      min-width: 140px;
+      max-width: 200px;
+      background: var(--color-background-primary);
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 10px;
+      padding: 10px 12px;
+      position: relative
+    }
+
+    .module-card.gold {
+      border-left: 3px solid var(--c-gold);
+      background: var(--c-gold-light)
+    }
+
+    .module-card.teal {
+      border-left: 3px solid var(--c-teal);
+      background: var(--c-teal-light)
+    }
+
+    .module-card.blue {
+      border-left: 3px solid var(--c-blue);
+      background: var(--c-blue-light)
+    }
+
+    .module-card.red {
+      border-left: 3px solid var(--c-red);
+      background: var(--c-red-light)
+    }
+
+    .module-card.purple {
+      border-left: 3px solid var(--c-purple);
+      background: var(--c-purple-light)
+    }
+
+    .module-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      margin-bottom: 2px
+    }
+
+    .module-sub {
+      font-size: 11px;
+      color: var(--color-text-secondary)
+    }
+
+    .flow-arrow {
+      text-align: center;
+      padding: 4px 0;
+      color: var(--color-text-tertiary);
+      font-size: 16px;
+      line-height: 1
+    }
+
+    /* SIMULATION BOX */
+    .sim-box {
+      background: var(--color-background-secondary);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 24px
+    }
+
+    .sim-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--color-text-primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .sim-steps {
+      display: flex;
+      gap: 0;
+      flex-wrap: wrap
+    }
+
+    .sim-step {
+      flex: 1;
+      min-width: 100px;
+      padding: 8px 10px;
+      border-right: 0.5px solid var(--color-border-tertiary);
+      position: relative
+    }
+
+    .sim-step:last-child {
+      border-right: none
+    }
+
+    .sim-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--c-teal);
+      font-weight: 700;
+      margin-bottom: 2px
+    }
+
+    .sim-name {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--color-text-primary)
+    }
+
+    .sim-desc {
+      font-size: 10px;
+      color: var(--color-text-secondary);
+      margin-top: 2px
+    }
+
+    /* SECTION LABEL */
+    .sec-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin: 32px 0 12px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+      padding-bottom: 6px;
+    }
+
+    /* CHECKLIST SPECIFIC */
+    .deal-strip {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--color-background-secondary);
+      border-radius: 8px;
+      margin-bottom: 16px
+    }
+
+    .df {
+      display: flex;
+      flex-direction: column;
+      gap: 1px
+    }
+
+    .dk {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary)
+    }
+
+    .dv {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary)
+    }
+
+    .global-bar-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 18px;
+      padding: 10px 14px;
+      background: var(--color-background-secondary);
+      border-radius: 8px
+    }
+
+    .gb-label {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      white-space: nowrap
+    }
+
+    .gb-track {
+      flex: 1;
+      height: 5px;
+      background: var(--color-border-tertiary);
+      border-radius: 3px;
+      overflow: hidden
+    }
+
+    .gb-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: var(--color-background-success);
+      transition: width 0.35s
+    }
+
+    .gb-count {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      min-width: 44px;
+      text-align: right
+    }
+
+    .phase-sep {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 20px 0 10px
+    }
+
+    .ph-num {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      white-space: nowrap
+    }
+
+    .ph-title {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      white-space: nowrap
+    }
+
+    .ph-line {
+      flex: 1;
+      height: 0.5px;
+      background: var(--color-border-tertiary)
+    }
+
+    .day-block {
+      margin-bottom: 8px;
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 10px;
+      overflow: hidden
+    }
+
+    .day-hdr {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 13px;
+      background: var(--color-background-secondary);
+      cursor: pointer;
+      user-select: none
+    }
+
+    .day-hdr:hover {
+      background: var(--color-background-tertiary)
+    }
+
+    .dpill {
+      font-size: 9px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+      white-space: nowrap
+    }
+
+    .p1c {
+      background: #E1F5EE;
+      color: #0F6E56
+    }
+
+    .p2c {
+      background: #E6F1FB;
+      color: #185FA5
+    }
+
+    .p3c {
+      background: #E8E2F7;
+      color: #5B3D9E
+    }
+
+    .p4c {
+      background: #FAEEDA;
+      color: #854F0B
+    }
+
+    .bufc {
+      background: #F1EFE8;
+      color: #5F5E5A
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .p1c {
+        background: #0e3630;
+        color: #85eed1
+      }
+
+      .p2c {
+        background: #102844;
+        color: #a2cbf6
+      }
+
+      .p3c {
+        background: #281b45;
+        color: #d5c3fa
+      }
+
+      .p4c {
+        background: #423013;
+        color: #fce4a8
+      }
+
+      .bufc {
+        background: #374151;
+        color: #d1d5db
+      }
+    }
+
+    .deadline-pill {
+      background: #FAEEDA;
+      color: #854F0B;
+      border: 1.5px solid #EF9F27
+    }
+
+    @media (prefers-color-scheme: dark) {
+      .deadline-pill {
+        background: #423013;
+        color: #fce4a8;
+        border: 1.5px solid #EF9F27
+      }
+    }
+
+    .day-theme {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--color-text-primary);
+      flex: 1;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap
+    }
+
+    .day-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-shrink: 0
+    }
+
+    .prog-txt {
+      font-size: 11px;
+      color: var(--color-text-tertiary)
+    }
+
+    .mini-prog {
+      width: 36px;
+      height: 4px;
+      background: var(--color-border-tertiary);
+      border-radius: 2px;
+      overflow: hidden
+    }
+
+    .mini-fill {
+      height: 100%;
+      border-radius: 2px;
+      background: var(--color-background-success);
+      transition: width 0.3s
+    }
+
+    .chev {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      transition: transform 0.18s;
+      flex-shrink: 0
+    }
+
+    .chev.open {
+      transform: rotate(180deg)
+    }
+
+    .mod-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 4px;
+      padding: 7px 13px;
+      border-bottom: 0.5px solid var(--color-border-tertiary)
+    }
+
+    .mtag {
+      font-size: 10px;
+      padding: 2px 7px;
+      border-radius: 20px;
+      border: 0.5px solid var(--color-border-tertiary);
+      color: var(--color-text-secondary)
+    }
+
+    .tasks-body {
+      padding: 4px 13px 8px
+    }
+
+    .task-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 9px;
+      padding: 6px 0;
+      border-bottom: 0.5px solid var(--color-border-tertiary);
+      cursor: pointer
+    }
+
+    .task-row:last-child {
+      border-bottom: none
+    }
+
+    .task-row:hover .ttext {
+      color: var(--color-text-primary)
+    }
+
+    .tcb {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--color-border-secondary);
+      flex-shrink: 0;
+      margin-top: 1px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--color-text-success);
+      transition: all 0.15s
+    }
+
+    .tcb.done {
+      background: var(--color-background-success);
+      border-color: var(--color-border-success)
+    }
+
+    .ttext {
+      font-size: 12px;
+      color: var(--color-text-secondary);
+      line-height: 1.5;
+      transition: color 0.15s
+    }
+
+    .ttext.done {
+      text-decoration: line-through;
+      opacity: 0.45
+    }
+
+    .tout {
+      font-size: 10px;
+      color: var(--color-text-tertiary);
+      margin-top: 1px
+    }
+
+    .deliv-bar {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px 13px;
+      background: var(--color-background-secondary);
+      border-top: 0.5px solid var(--color-border-tertiary)
+    }
+
+    .deliv-arrow {
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      flex-shrink: 0;
+      margin-top: 1px
+    }
+
+    .deliv-txt {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.4
+    }
+
+    .deliv-txt b {
+      color: var(--color-text-primary);
+      font-weight: 500
+    }
+
+    .rule-box {
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 8px;
+      padding: 10px 13px;
+      margin: 16px 0 8px;
+      background: var(--color-background-secondary)
+    }
+
+    .rule-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 5px
+    }
+
+    .rule-txt {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      line-height: 1.6
+    }
+
+    .out-block {
+      border: 0.5px solid var(--color-border-tertiary);
+      border-radius: 8px;
+      padding: 10px 13px;
+      margin-top: 8px
+    }
+
+    .out-lbl {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--color-text-tertiary);
+      margin-bottom: 7px
+    }
+
+    .out-item {
+      display: flex;
+      gap: 7px;
+      font-size: 11px;
+      color: var(--color-text-tertiary);
+      padding: 3px 0;
+      line-height: 1.4
+    }
+
+    .out-x {
+      color: var(--color-text-danger);
+      flex-shrink: 0
+    }
+
+    /* MODULE COVERAGE */
+    .module-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 8px;
+      margin-bottom: 24px
+    }
+
+    .mod-item {
+      background: var(--color-background-secondary);
+      border-radius: 8px;
+      padding: 8px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px
+    }
+
+    .mod-check {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--c-teal-light);
+      color: var(--c-teal-dark);
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0
+    }
+
+    .mod-name {
+      font-size: 11px;
+      color: var(--color-text-primary);
+      line-height: 1.3
+    }
+
+    .mod-day {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: var(--color-text-tertiary)
+    }
+
+    /* STACK */
+    .stack-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 24px
+    }
+
+    .stack-pill {
+      font-size: 11px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: var(--color-background-secondary);
+      color: var(--color-text-secondary);
+      border: 0.5px solid var(--color-border-tertiary)
+    }
+
+    .stack-pill b {
+      color: var(--color-text-primary);
+      font-weight: 500
+    }
+
+    /* SUMMARY CARDS */
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 8px
+    }
+
+    .sum-card {
+      background: var(--color-background-secondary);
+      border-radius: 10px;
+      padding: 12px 14px;
+      text-align: center
+    }
+
+    .sum-num {
+      font-family: 'Space Mono', monospace;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--color-text-primary)
+    }
+
+    .sum-label {
+      font-size: 11px;
+      color: var(--color-text-secondary);
+      margin-top: 2px
+    }
+
+    /* TABS */
+    .tab-container {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--color-border-tertiary);
+    }
+
+    .tab-button {
+      background: none;
+      border: none;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--color-text-secondary);
+      padding: 8px 4px;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .tab-button:hover {
+      color: var(--color-text-primary);
+    }
+
+    .tab-button.active {
+      color: var(--color-text-primary);
+    }
+
+    .tab-button.active::after {
+      content: '';
+      position: absolute;
+      bottom: -1px;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: var(--c-teal);
+      border-radius: 2px 2px 0 0;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="root">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="logo">ACQUIRE OS AI™</div>
+      <div class="header-text">
+        <h1>Unified MVP Dashboard</h1>
+        <p>React-only Prototype · May 8 → May 20, 2026</p>
+      </div>
+      <div class="badges">
+        <div class="badge-row">
+          <span class="badge badge-teal">Prototype: May 15</span>
+          <span class="badge badge-gold">Hard Deadline: May 20</span>
+        </div>
+        <div class="sync-row">
+          <div class="sync-dot loading" id="sync-dot"></div>
+          <span class="sync-label" id="sync-label">Connecting to shared storage...</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-container">
+      <button class="tab-button active" onclick="switchTab('overview')">Workflow Overview</button>
+      <button class="tab-button" onclick="switchTab('checklist')">Interactive Checklist</button>
+    </div>
+
+    <div id="overview" class="tab-content active">
+      <!-- DAILY RHYTHM -->
+      <p class="sec-label" style="margin-top: 0">Daily rhythm — every day May 8 onwards</p>
+      <div class="rhythm-strip">
+        <span class="rhythm-label">Every Day</span>
+        <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-gold)"></span>9:00–9:30 AM · Client
+          meeting</div>
+        <span class="rhythm-sep">→</span>
+        <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-blue)"></span>9:30 AM–6:00 PM ·
+          React dev</div>
+        <span class="rhythm-sep">→</span>
+        <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-teal)"></span>6:00–6:30 PM · PM sync
+        </div>
+        <span class="rhythm-sep">→</span>
+        <div class="rhythm-item"><span class="rhythm-dot"
+            style="background:var(--color-border-secondary)"></span>Evening · Update checklist</div>
+      </div>
+
+      <!-- INTEGRATED WORKFLOW -->
+      <p class="sec-label">Integrated module flow (complete user journey)</p>
+      <div class="workflow-flow">
+        <div class="flow-modules">
+          <div class="module-card gold">
+            <div class="module-name">Seller Uploads Deal</div>
+            <div class="module-sub">Mock drag & drop · Deal Intake</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card gold">
+            <div class="module-name">Parsed Data Review</div>
+            <div class="module-sub">Editable fields · Confidence scores</div>
+          </div>
+          <div class="module-card gold">
+            <div class="module-name">Admin Validation</div>
+            <div class="module-sub">Role-based approval · Mock</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card blue">
+            <div class="module-name">Dashboard</div>
+            <div class="module-sub">Deal cards · Pipeline overview</div>
+          </div>
+          <div class="module-card blue">
+            <div class="module-name">Market Intelligence</div>
+            <div class="module-sub">Mock market score cards</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card teal">
+            <div class="module-name">AI Underwriting Engine</div>
+            <div class="module-sub">NOI · Cap Rate · Cash Flow · Mock</div>
+          </div>
+          <div class="module-card teal">
+            <div class="module-name">Assumptions Editor</div>
+            <div class="module-sub">Sliders · Live recalculation</div>
+          </div>
+          <div class="module-card teal">
+            <div class="module-name">Stress Test</div>
+            <div class="module-sub">Best / Base / Worst scenarios</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card teal">
+            <div class="module-name">Deal Score & Verdict</div>
+            <div class="module-sub">Score · Strengths · Risks · Offer</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card purple">
+            <div class="module-name">LOI Generator</div>
+            <div class="module-sub">Editable clauses · Version history · Mock PDF</div>
+          </div>
+          <div class="module-card purple">
+            <div class="module-name">Lender Match</div>
+            <div class="module-sub">Fit score cards · Rules engine</div>
+          </div>
+          <div class="module-card purple">
+            <div class="module-name">Loan Package</div>
+            <div class="module-sub">Exec summary · Mock download</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card blue">
+            <div class="module-name">Outreach & Comms</div>
+            <div class="module-sub">Email / SMS templates</div>
+          </div>
+          <div class="module-card blue">
+            <div class="module-name">Actions & Follow-up</div>
+            <div class="module-sub">Kanban pipeline · Task list</div>
+          </div>
+          <div class="module-card blue">
+            <div class="module-name">Activity Log</div>
+            <div class="module-sub">Timeline · Notes · Comments</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card gold">
+            <div class="module-name">PSA Assistant</div>
+            <div class="module-sub">Draft generator · Editable</div>
+          </div>
+          <div class="module-card gold">
+            <div class="module-name">Escrow Tracker</div>
+            <div class="module-sub">Title Company Simulator</div>
+          </div>
+          <div class="module-card gold">
+            <div class="module-name">Due Diligence</div>
+            <div class="module-sub">Interactive checklist</div>
+          </div>
+          <div class="module-card gold">
+            <div class="module-name">Financing & Closing</div>
+            <div class="module-sub">Progress milestone flow</div>
+          </div>
+        </div>
+        <div class="flow-arrow">↓</div>
+        <div class="flow-modules">
+          <div class="module-card teal">
+            <div class="module-name">Asset Plan & Hold</div>
+            <div class="module-sub">Business plan UI</div>
+          </div>
+          <div class="module-card teal">
+            <div class="module-name">Exit Strategy</div>
+            <div class="module-sub">Scenario modeling · Projections</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TITLE COMPANY SIMULATION -->
+      <p class="sec-label">Title company workflow — simulated inside Escrow Tracker (Day 7)</p>
+      <div class="sim-box">
+        <div class="sim-steps">
+          <div class="sim-step">
+            <div class="sim-num">01</div>
+            <div class="sim-name">Open Escrow</div>
+            <div class="sim-desc">Submit contract · GF number · Assign officer</div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-num">02</div>
+            <div class="sim-name">Title Search</div>
+            <div class="sim-desc">Mock chain of title · Liens / taxes found</div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-num">03</div>
+            <div class="sim-name">Clear Title</div>
+            <div class="sim-desc">Interactive checklist · Resolve issues</div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-num">04</div>
+            <div class="sim-name">Closing Prep</div>
+            <div class="sim-desc">Closing disclosure preview · Settlement</div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-num">05</div>
+            <div class="sim-name">Signing Day</div>
+            <div class="sim-desc">Doc signing simulation · Funds verify</div>
+          </div>
+          <div class="sim-step">
+            <div class="sim-num">06</div>
+            <div class="sim-name">Post-Closing</div>
+            <div class="sim-desc">Record deed · Issue policy</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- MODULE COVERAGE -->
+      <p class="sec-label">All 18 modules covered</p>
+      <div class="module-grid">
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">User Roles & Permissions</div>
+            <div class="mod-day">May 8</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Deal Dashboard</div>
+            <div class="mod-day">May 8</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Deal Intake & Lead Gen</div>
+            <div class="mod-day">May 8</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Parsed Data Review</div>
+            <div class="mod-day">May 8</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">AI Underwriting Engine</div>
+            <div class="mod-day">May 9</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Assumptions Editor</div>
+            <div class="mod-day">May 9</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Stress Test</div>
+            <div class="mod-day">May 9</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Deal Score & Verdict</div>
+            <div class="mod-day">May 10</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Market Intelligence</div>
+            <div class="mod-day">May 10</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">LOI Generator</div>
+            <div class="mod-day">May 11</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Outreach & Comms</div>
+            <div class="mod-day">May 11</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Lender Match Engine</div>
+            <div class="mod-day">May 12</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Loan Package Gen</div>
+            <div class="mod-day">May 12</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Pipeline + Tasks + Log</div>
+            <div class="mod-day">May 13</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">PSA Assistant</div>
+            <div class="mod-day">May 14</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Escrow + Title Simulator</div>
+            <div class="mod-day">May 14</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Due Diligence</div>
+            <div class="mod-day">May 14</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Financing & Closing</div>
+            <div class="mod-day">May 14</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Asset Plan & Hold</div>
+            <div class="mod-day">May 15</div>
+          </div>
+        </div>
+        <div class="mod-item">
+          <div class="mod-check">✓</div>
+          <div>
+            <div class="mod-name">Exit Strategy</div>
+            <div class="mod-day">May 15</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TECH STACK -->
+      <p class="sec-label">Frontend-only tech stack</p>
+      <div class="stack-row">
+        <span class="stack-pill"><b>React + Vite</b></span>
+        <span class="stack-pill"><b>Tailwind CSS</b></span>
+        <span class="stack-pill"><b>React Router</b></span>
+        <span class="stack-pill"><b>Zustand</b> · global state</span>
+        <span class="stack-pill"><b>React Hook Form + Zod</b></span>
+        <span class="stack-pill"><b>Recharts</b> · charts</span>
+        <span class="stack-pill"><b>Lucide React</b> · icons</span>
+        <span class="stack-pill"><b>react-hot-toast</b></span>
+        <span class="stack-pill"><b>Mock AI logic</b> · JS functions</span>
+        <span class="stack-pill"><b>No backend · No API</b></span>
+      </div>
+
+      <!-- SUMMARY -->
+      <div class="summary-grid">
+        <div class="sum-card">
+          <div class="sum-num">8</div>
+          <div class="sum-label">Dev days to prototype</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-num">20</div>
+          <div class="sum-label">Modules in prototype</div>
+        </div>
+        <div class="sum-card">
+          <div class="sum-num">5</div>
+          <div class="sum-label">Buffer days for polish</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="checklist" class="tab-content">
+      <div
+        style="margin-bottom:8px;font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-text-tertiary)">
+        Demo deal — runs through all modules</div>
+      <div class="deal-strip">
+        <div class="df">
+          <div class="dk">Property</div>
+          <div class="dv">Sunset Apartments</div>
+        </div>
+        <div class="df">
+          <div class="dk">Location</div>
+          <div class="dv">Dallas, Texas</div>
+        </div>
+        <div class="df">
+          <div class="dk">Units</div>
+          <div class="dv">120 · Multifamily</div>
+        </div>
+        <div class="df">
+          <div class="dk">Asking Price</div>
+          <div class="dv">$12,900,000</div>
+        </div>
+        <div class="df">
+          <div class="dk">NOI</div>
+          <div class="dv">$775,000</div>
+        </div>
+        <div class="df">
+          <div class="dk">Purpose</div>
+          <div class="dv">Flows through all 16 modules</div>
+        </div>
+      </div>
+
+      <div class="global-bar-wrap">
+        <span class="gb-label">Overall progress</span>
+        <div class="gb-track">
+          <div class="gb-fill" id="gb-fill" style="width:0%"></div>
+        </div>
+        <span class="gb-count" id="gb-count">— / —</span>
+      </div>
+
+      <div id="cl-root"></div>
+
+      <div class="rule-box">
+        <div class="rule-lbl">The one rule for this sprint</div>
+        <div class="rule-txt">Every feature we build must work end-to-end and be demonstrable. No half-built features.
+          If we build it, it must run. If we cannot finish it fully, we show a clean placeholder screen — not broken
+          code.</div>
+      </div>
+
+      <div class="out-block">
+        <div class="out-lbl">Explicitly out of scope for this prototype</div>
+        <div class="out-item"><span class="out-x">✗</span>Real broker email integration (Gmail / Outlook)</div>
+        <div class="out-item"><span class="out-x">✗</span>Live real estate listing API connections (CREXi / LoopNet)
+        </div>
+        <div class="out-item"><span class="out-x">✗</span>DocuSign / e-signature integration</div>
+        <div class="out-item"><span class="out-x">✗</span>Real lender API connections or rate feeds</div>
+        <div class="out-item"><span class="out-x">✗</span>Native mobile application</div>
+        <div class="out-item"><span class="out-x">✗</span>Multi-user collaboration features</div>
+        <div class="out-item"><span class="out-x">✗</span>Automated task completion detection</div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      document.querySelectorAll('.tab-button').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    const DATA = [
+      {
+        phase: 'Phase 1', phaseTitle: 'Foundation', pill: 'p1c', days: [
+          {
+            id: 'd1', date: 'May 8 — Fri', theme: 'User Roles · Dashboard · Deal Intake · Parsed Data Review',
+            modules: ['User Roles & Permissions', 'Deal Dashboard', 'Deal Intake', 'Parsed Data Review'],
+            tasks: [
+              { id: 'd1t1', t: 'Build login / role selector screen (Buyer / Seller / Admin)', o: 'Role-based UI loads correctly' },
+              { id: 'd1t2', t: 'Build main Dashboard layout — pipeline bar + KPI card shells', o: 'Dashboard visible in browser' },
+              { id: 'd1t3', t: 'Build drag & drop upload UI (mock — no real storage)', o: 'User can upload 3 mock files' },
+              { id: 'd1t4', t: 'Build Parsed Data tabs with editable fields', o: 'Extracted fields visible and editable' },
+              { id: 'd1t5', t: 'Add confidence score indicators per field', o: 'Each field shows a mock confidence %' },
+              { id: 'd1t6', t: 'Add Approve / Reject button for Admin role', o: 'Admin can approve a deal' },
+            ], deliv: 'Working role-based dashboard + deal upload + parsed data review UI'
+          },
+        ]
+      },
+      {
+        phase: 'Phase 2', phaseTitle: 'Core Intelligence Engine', pill: 'p2c', days: [
+          {
+            id: 'd2', date: 'May 9 — Sat', theme: 'AI Underwriting Engine · Assumptions Editor · Stress Test',
+            modules: ['AI Underwriting Engine (M4)', 'Assumptions Editor', 'Stress Test'],
+            tasks: [
+              { id: 'd2t1', t: 'Build underwriting results screen — NOI, Cap Rate, DSCR, CoC, IRR cards', o: '8 metrics visible with mock values' },
+              { id: 'd2t2', t: 'Build 10-year cash flow proforma table (mock data)', o: 'Year-by-year projection table rendered' },
+              { id: 'd2t3', t: 'Build Assumptions Editor — sliders / inputs that live-recalculate metrics', o: 'Change a slider and numbers update instantly' },
+              { id: 'd2t4', t: 'Build Stress Test tab — Best / Base / Worst scenario cards', o: '3 scenario cards visible side by side' },
+              { id: 'd2t5', t: 'Add breakpoint alerts (e.g. DSCR below 1.2 warning)', o: 'Warning badge fires on threshold' },
+              { id: 'd2t6', t: 'Add bar/line chart for scenario comparison (Recharts)', o: 'Chart renders with mock scenario data' },
+            ], deliv: 'Assumptions editor + stress test working end-to-end with mock logic'
+          },
+          {
+            id: 'd3', date: 'May 10 — Sun', theme: 'Deal Score & Verdict · Market Intelligence',
+            modules: ['Deal Score & Verdict (M5)', 'Market Intelligence (M2)'],
+            tasks: [
+              { id: 'd3t1', t: 'Build Deal Score gauge — 0-100 visual dial or score card', o: '78/100 score displays' },
+              { id: 'd3t2', t: 'Build Verdict banner (green/yellow/red) with plain-English text', o: 'Verdict: Strong potential with manageable risks' },
+              { id: 'd3t3', t: 'Build Resilience Score indicator', o: 'Stress resilience score visible' },
+              { id: 'd3t4', t: 'Build Strengths list with green checkmarks (mock AI output)', o: '3–5 strengths listed' },
+              { id: 'd3t5', t: 'Build Risks list with warning icons (mock AI output)', o: '3–5 risks listed' },
+              { id: 'd3t6', t: 'Build Recommended Offer section — Base / Aggressive / Safe cards', o: '3 offer scenarios with price ranges' },
+              { id: 'd3t7', t: 'Build Market Intelligence screen — 50-state score cards + ranking table', o: 'State rankings visible with mock data' },
+            ], deliv: 'Full deal score + multi-scenario offer + market view live'
+          },
+          {
+            id: 'd4', date: 'May 11 — Mon', theme: 'Lender Match Engine · Loan Package Generator',
+            modules: ['Lender Match Engine (M6)', 'Loan Package Generator (M7)'],
+            tasks: [
+              { id: 'd4t1', t: 'Build Lender Match cards — fit score + rule chips per lender', o: 'Top 5 lenders ranked with scores' },
+              { id: 'd4t2', t: 'Add Best Fit Loan highlight card (LTV, Rate, Closing speed)', o: 'Best Fit: Bridge 75% LTV 8.50% displayed' },
+              { id: 'd4t3', t: 'Add Why This Loan explanation block (mock AI paragraph)', o: 'Plain-English reason visible' },
+              { id: 'd4t4', t: 'Add Lender detail modal on click', o: 'Lender detail expands correctly' },
+              { id: 'd4t5', t: 'Build Loan Package preview — all 10 sections visible', o: 'Exec Summary, T12, Market Overview etc. rendered' },
+              { id: 'd4t6', t: 'Add mock Download PDF button', o: 'Button shows success toast on click' },
+            ], deliv: 'Lender recommendations + loan package preview working'
+          },
+        ]
+      },
+      {
+        phase: 'Phase 3', phaseTitle: 'Execution & Documents', pill: 'p3c', days: [
+          {
+            id: 'd5', date: 'May 12 — Tue', theme: 'LOI Generator · Outreach & Communication',
+            modules: ['LOI Generator (M10)', 'Outreach & Communication (M8)'],
+            tasks: [
+              { id: 'd5t1', t: 'Build LOI form — auto-filled fields from mock deal data', o: 'All LOI fields pre-populated' },
+              { id: 'd5t2', t: 'Add AI term suggestion tooltips per field (mock)', o: 'Suggestions appear next to relevant fields' },
+              { id: 'd5t3', t: 'Build LOI live preview panel', o: 'Preview updates as user edits fields' },
+              { id: 'd5t4', t: 'Add Version History list + Save New Version button', o: 'Version history saves and lists correctly' },
+              { id: 'd5t5', t: 'Add mock PDF Download button for LOI', o: 'One-click download triggers toast' },
+              { id: 'd5t6', t: 'Build Outreach screen — Email / SMS / Call Script channel selector', o: 'Three-panel UI with channel toggle' },
+              { id: 'd5t7', t: 'Add mock generated message panel with edit capability', o: 'Message appears and is editable' },
+              { id: 'd5t8', t: 'Add Template Save + Template Library screen', o: 'Templates saved and browsable' },
+            ], deliv: 'LOI with versioning feel + outreach templates ready'
+          },
+          {
+            id: 'd6', date: 'May 13 — Wed', theme: 'Actions & Follow-up · Pipeline · Activity Log',
+            modules: ['Actions & Follow-up (M9)', 'Pipeline', 'Activity Log'],
+            tasks: [
+              { id: 'd6t1', t: 'Build AI Next Best Actions task list — priority badges (High / Medium / Low)', o: '6–8 prioritised tasks visible' },
+              { id: 'd6t2', t: 'Add Deal Momentum Score indicator', o: '72/100 Good Momentum shown' },
+              { id: 'd6t3', t: 'Build Kanban pipeline board — drag & drop between stages', o: 'Deal cards draggable across columns' },
+              { id: 'd6t4', t: 'Build per-deal Task list with status toggle', o: 'Tasks check off correctly' },
+              { id: 'd6t5', t: 'Build Activity Log timeline — actions recorded as user progresses', o: 'Timeline entries appear as tasks complete' },
+              { id: 'd6t6', t: 'Add Notes / Comments section per deal', o: 'User can add and save a note' },
+            ], deliv: 'Functional pipeline + tasks + activity log all connected'
+          },
+        ]
+      },
+      {
+        phase: 'Phase 4', phaseTitle: 'Post-LOI · Closing · Polish', pill: 'p4c', days: [
+          {
+            id: 'd7', date: 'May 14 — Thu', theme: 'PSA Assistant · Escrow Tracker · Due Diligence · Financing & Closing',
+            modules: ['PSA Assistant (M11)', 'Escrow Tracker (M12)', 'Due Diligence (M13)', 'Financing & Closing (M14)'],
+            tasks: [
+              { id: 'd7t1', t: 'Build PSA template selector (Standard / Value-Add / Stabilized)', o: 'Correct template auto-selects based on deal type' },
+              { id: 'd7t2', t: 'Build PSA draft screen — all 9 sections populated from mock deal data', o: 'No blank PSA fields in demo' },
+              { id: 'd7t3', t: 'Add AI risk flag banners on relevant PSA sections (yellow warnings)', o: 'Flags appear in relevant sections' },
+              { id: 'd7t4', t: 'Add mock Word .docx Download button for PSA', o: 'Export button present with disclaimer text' },
+              { id: 'd7t5', t: 'Build Escrow Tracker 6-step Title Company wizard simulator', o: 'Open Escrow → Title Search → Clear → Closing Prep → Signing → Post-Closing' },
+              { id: 'd7t6', t: 'Add circular progress indicator + milestone table (color-coded)', o: '60% progress shown with green/orange/gray states' },
+              { id: 'd7t7', t: 'Add delay prediction alert for overdue milestones', o: 'Alert fires when milestone exceeds benchmark' },
+              { id: 'd7t8', t: 'Build Due Diligence checklist — 9 items with status toggle + progress ring', o: '72% complete shown for demo deal' },
+              { id: 'd7t9', t: 'Build Financing & Closing progress screen — 6 steps with Closing Readiness Score', o: '67% progress, key loan summary visible' },
+            ], deliv: 'PSA + full title company simulation + DD + closing flow complete'
+          },
+          {
+            id: 'd8', date: 'May 15 — Fri · PROTOTYPE DEADLINE', theme: 'Asset Plan · Exit Strategy · Full Integration + Polish',
+            deadline: true,
+            modules: ['Asset Plan & Hold (M15)', 'Exit Strategy (M16)', 'Full Integration'],
+            tasks: [
+              { id: 'd8t1', t: 'Build Asset Plan screen — 4 KPI progress bars + NOI Growth line chart', o: 'CapEx 65%, Rents 70%, Expenses 60%, Mgmt 85%' },
+              { id: 'd8t2', t: 'Build Exit Strategy screen — 4 scenario cards (Sell / Refi / 1031 / Hold)', o: 'Each card shows IRR + Equity Multiple + Net Proceeds' },
+              { id: 'd8t3', t: 'Add AI Recommended Exit banner (mock)', o: 'Sell in Year 4 recommendation displayed' },
+              { id: 'd8t4', t: 'Connect all screens end-to-end — navigation flows without breaks', o: 'Full deal journey works without any module crashing' },
+              { id: 'd8t5', t: 'Wire Dashboard KPI cards to mock global deal data', o: '48 deals, $78.4M total value, 6.45% avg cap rate shown' },
+              { id: 'd8t6', t: 'Load Sunset Apartments demo deal through all 16 modules', o: 'One deal flows through the entire platform cleanly' },
+              { id: 'd8t7', t: 'Final UI consistency pass — spacing, typography, color, loading states', o: 'No broken layouts or mismatched styles' },
+              { id: 'd8t8', t: 'Responsive check — key screens work at 1024px', o: 'Nothing breaks on smaller viewports' },
+            ], deliv: 'PROTOTYPE READY — Complete end-to-end React app · All 16 modules + Dashboard'
+          },
+        ]
+      },
+      {
+        phase: 'Buffer', phaseTitle: 'Polish · Test · Deliver', pill: 'bufc', days: [
+          {
+            id: 'd9', date: 'May 16 — Sat · Buffer 1', theme: 'UI / UX Polish & Consistency', modules: [],
+            tasks: [
+              { id: 'd9t1', t: 'Design consistency pass across all screens', o: '' },
+              { id: 'd9t2', t: 'Add loading states and skeleton screens', o: '' },
+              { id: 'd9t3', t: 'Improve micro-interactions and hover states', o: '' },
+              { id: 'd9t4', t: 'Fix any mobile / responsive edge cases', o: '' },
+            ], deliv: 'Noticeably cleaner, more polished UI'
+          },
+          {
+            id: 'd10', date: 'May 17 — Sun · Buffer 2', theme: 'Performance + Bug Fixing', modules: [],
+            tasks: [
+              { id: 'd10t1', t: 'Fix all issues surfaced during May 15 prototype demo', o: '' },
+              { id: 'd10t2', t: 'Optimise slow-rendering screens', o: '' },
+              { id: 'd10t3', t: 'Add error handling and empty state screens', o: '' },
+              { id: 'd10t4', t: 'Cross-browser check (Chrome + Safari)', o: '' },
+            ], deliv: 'Stable, fast, crash-free app'
+          },
+          {
+            id: 'd11', date: 'May 18 — Mon · Buffer 3', theme: 'Documentation + Demo Video', modules: [],
+            tasks: [
+              { id: 'd11t1', t: 'Write user guide covering all 16 modules', o: '' },
+              { id: 'd11t2', t: 'Record Loom walkthrough video of full prototype', o: '' },
+              { id: 'd11t3', t: 'Write component notes for dev handoff', o: '' },
+            ], deliv: 'Professional documentation + demo video ready'
+          },
+          {
+            id: 'd12', date: 'May 19 — Tue · Buffer 4', theme: 'Final Testing + Client Feedback', modules: [],
+            tasks: [
+              { id: 'd12t1', t: 'Full regression test — every module, every interaction', o: '' },
+              { id: 'd12t2', t: 'Incorporate feedback from May 15 prototype presentation', o: '' },
+              { id: 'd12t3', t: 'Final accessibility check', o: '' },
+            ], deliv: 'Bug-free, client-feedback-incorporated version'
+          },
+          {
+            id: 'd13', date: 'May 20 — Wed · HARD DEADLINE', theme: 'Final Delivery & Presentation',
+            deadline: true, modules: [],
+            tasks: [
+              { id: 'd13t1', t: 'Production deploy (Vercel + hosting)', o: '' },
+              { id: 'd13t2', t: 'Final client presentation — walk through all 16 modules with Sunset Apartments', o: '' },
+              { id: 'd13t3', t: 'Project handover — live URL, credentials, documentation', o: '' },
+            ], deliv: 'FINAL MVP DELIVERED — Live, polished, fully demoable'
+          },
+        ]
+      },
+    ];
+
+    const STORAGE_KEY = 'acquireos_checklist_v2';
+
+    // ── Firebase Realtime Database (free tier, no CORS issues) ──────────────
+    // Project: acquireos-tracker  |  Region: us-central1
+    const FB_URL = 'https://acquireos-tracker-default-rtdb.firebaseio.com/checklist.json';
+    // ────────────────────────────────────────────────────────────────────────
+
+    let state = {};
+    let syncStatus = 'loading';
+    let _unsubscribe = null;
+
+    function setSyncUI(s, msg) {
+      syncStatus = s;
+      document.querySelectorAll('.sync-dot, #sync-dot').forEach(el => {
+        el.className = 'sync-dot' + (s === 'ok' ? '' : s === 'loading' ? ' loading' : ' error');
+      });
+      document.querySelectorAll('.sync-label, #sync-label').forEach(el => {
+        el.textContent = msg;
+      });
+    }
+
+    async function loadState() {
+      setSyncUI('loading', 'Connecting to shared storage…');
+      try {
+        const res = await fetch(FB_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          state = data;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        }
+        setSyncUI('ok', 'Live · synced across all devices');
+      } catch (e) {
+        console.error('Firebase load error:', e);
+        try {
+          const local = localStorage.getItem(STORAGE_KEY);
+          if (local) state = JSON.parse(local);
+        } catch (_) {}
+        setSyncUI('error', 'Offline · showing local backup');
+      }
+      renderAll();
+      startPolling();
+    }
+
+    async function saveState() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setSyncUI('loading', 'Saving…');
+      try {
+        const res = await fetch(FB_URL, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(state)
+        });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        setSyncUI('ok', 'Saved · synced across all devices');
+      } catch (e) {
+        console.error('Firebase save error:', e);
+        setSyncUI('error', 'Save failed · stored locally');
+      }
+    }
+
+    // Poll every 12 seconds — picks up changes made on other devices/laptops
+    function startPolling() {
+      setInterval(async () => {
+        try {
+          const res = await fetch(FB_URL);
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data && typeof data === 'object') {
+            const incoming = JSON.stringify(data);
+            const current  = JSON.stringify(state);
+            if (incoming !== current) {
+              state = data;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+              renderAll(); // re-render only when remote has new data
+            }
+          }
+          setSyncUI('ok', 'Live · synced across all devices');
+        } catch (_) {
+          setSyncUI('error', 'Sync lost · retrying…');
+        }
+      }, 12000);
+    }
+
+    function allTaskIds() {
+      const ids = [];
+      DATA.forEach(ph => ph.days.forEach(d => d.tasks.forEach(t => ids.push(t.id))));
+      return ids;
+    }
+
+    function updateGlobalBar() {
+      const all = allTaskIds();
+      const done = all.filter(id => state[id]).length;
+      const pct = all.length ? Math.round(done / all.length * 100) : 0;
+      document.getElementById('gb-fill').style.width = pct + '%';
+      document.getElementById('gb-count').textContent = done + ' / ' + all.length;
+    }
+
+    function updateDayMini(dayId, tasks) {
+      const done = tasks.filter(t => state[t.id]).length;
+      const total = tasks.length;
+      const pct = total ? Math.round(done / total * 100) : 0;
+      const progEl = document.getElementById('prog-' + dayId);
+      const miniEl = document.getElementById('mini-' + dayId);
+      if (progEl) progEl.textContent = done + '/' + total;
+      if (miniEl) miniEl.style.width = pct + '%';
+    }
+
+    function toggleTask(taskId, dayId, tasks) {
+      state[taskId] = !state[taskId];
+      const cb = document.getElementById('cb-' + taskId);
+      const tt = document.getElementById('tt-' + taskId);
+      if (cb) { cb.classList.toggle('done', state[taskId]); cb.textContent = state[taskId] ? '✓' : ''; }
+      if (tt) tt.classList.toggle('done', state[taskId]);
+      updateDayMini(dayId, tasks);
+      updateGlobalBar();
+      saveState();
+    }
+
+    function renderAll() {
+      const root = document.getElementById('cl-root');
+      root.innerHTML = '';
+
+      DATA.forEach(phase => {
+        const sep = document.createElement('div');
+        sep.className = 'phase-sep';
+        sep.innerHTML = `<span class="ph-num">${phase.phase}</span><span class="ph-title">${phase.phaseTitle}</span><div class="ph-line"></div>`;
+        root.appendChild(sep);
+
+        phase.days.forEach(day => {
+          const block = document.createElement('div');
+          block.className = 'day-block';
+
+          const pillClass = day.deadline ? (day.date.includes('PROTOTYPE') ? 'p4c deadline-pill' : 'bufc deadline-pill') : phase.pill;
+          const hdr = document.createElement('div');
+          hdr.className = 'day-hdr';
+          const doneCnt = day.tasks.filter(t => state[t.id]).length;
+          const totCnt = day.tasks.length;
+          const pct = totCnt ? Math.round(doneCnt / totCnt * 100) : 0;
+          hdr.innerHTML = `
+        <span class="dpill ${pillClass}">${day.date}</span>
+        <div class="day-theme">${day.theme}</div>
+        <div class="day-right">
+          <span class="prog-txt" id="prog-${day.id}">${doneCnt}/${totCnt}</span>
+          <div class="mini-prog"><div class="mini-fill" id="mini-${day.id}" style="width:${pct}%"></div></div>
+          <span class="chev" id="chev-${day.id}">▾</span>
+        </div>`;
+          block.appendChild(hdr);
+
+          if (day.modules && day.modules.length) {
+            const mt = document.createElement('div');
+            mt.className = 'mod-tags';
+            mt.id = 'mt-' + day.id;
+            mt.style.display = 'none';
+            day.modules.forEach(m => { mt.innerHTML += `<span class="mtag">${m}</span>`; });
+            block.appendChild(mt);
+          }
+
+          const tbody = document.createElement('div');
+          tbody.className = 'tasks-body';
+          tbody.id = 'tb-' + day.id;
+          tbody.style.display = 'none';
+
+          day.tasks.forEach(task => {
+            const row = document.createElement('div');
+            row.className = 'task-row';
+            const isDone = !!state[task.id];
+            row.innerHTML = `
+          <div class="tcb${isDone ? ' done' : ''}" id="cb-${task.id}">${isDone ? '✓' : ''}</div>
+          <div style="flex:1;min-width:0">
+            <div class="ttext${isDone ? ' done' : ''}" id="tt-${task.id}">${task.t}</div>
+            ${task.o ? `<div class="tout">→ ${task.o}</div>` : ''}
+          </div>`;
+            row.addEventListener('click', () => toggleTask(task.id, day.id, day.tasks));
+            tbody.appendChild(row);
+          });
+          block.appendChild(tbody);
+
+          const dv = document.createElement('div');
+          dv.className = 'deliv-bar';
+          dv.id = 'dv-' + day.id;
+          dv.style.display = 'none';
+          const isHero = day.deliv.includes('READY') || day.deliv.includes('DELIVERED');
+          dv.innerHTML = `<span class="deliv-arrow">${isHero ? '★' : '→'}</span><div class="deliv-txt">${isHero ? '<b>' + day.deliv + '</b>' : day.deliv}</div>`;
+          block.appendChild(dv);
+
+          let open = false;
+          hdr.addEventListener('click', () => {
+            open = !open;
+            tbody.style.display = open ? 'block' : 'none';
+            dv.style.display = open ? 'flex' : 'none';
+            const mt = document.getElementById('mt-' + day.id);
+            if (mt) mt.style.display = open ? 'flex' : 'none';
+            const chev = document.getElementById('chev-' + day.id);
+            if (chev) chev.classList.toggle('open', open);
+          });
+
+          root.appendChild(block);
+        });
+      });
+
+      updateGlobalBar();
+    }
+
+    loadState();
+  </script>
+</body>
+
+</html>
