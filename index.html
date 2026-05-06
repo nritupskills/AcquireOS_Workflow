@@ -1533,84 +1533,87 @@
     ];
 
     const STORAGE_KEY = 'acquireos_checklist_v2';
-    const JSONBIN_BIN_ID = '69fad290856a682189b069b0'; // e.g. 663b1...
-    const JSONBIN_API_KEY = '$2a$10$sBJf4lQ/fhAWTNezFr4AWeCD91tvPgVvdPLf3bRlE.2z.CrqqVyxu'; // e.g. $2a$10$...
+
+    // ── Firebase Realtime Database (free tier, no CORS issues) ──────────────
+    // Project: acquireos-tracker  |  Region: us-central1
+    const FB_URL = 'https://acquireos-tracker-default-rtdb.firebaseio.com/checklist.json';
+    // ────────────────────────────────────────────────────────────────────────
 
     let state = {};
     let syncStatus = 'loading';
+    let _unsubscribe = null;
 
     function setSyncUI(s, msg) {
       syncStatus = s;
-      // Support both id and class selectors
-      const dots = document.querySelectorAll('.sync-dot, #sync-dot');
-      const lbls = document.querySelectorAll('.sync-label, #sync-label');
-      dots.forEach(dot => {
-        dot.className = 'sync-dot' + (s === 'ok' ? '' : s === 'loading' ? ' loading' : ' error');
+      document.querySelectorAll('.sync-dot, #sync-dot').forEach(el => {
+        el.className = 'sync-dot' + (s === 'ok' ? '' : s === 'loading' ? ' loading' : ' error');
       });
-      lbls.forEach(lbl => {
-        lbl.textContent = msg;
+      document.querySelectorAll('.sync-label, #sync-label').forEach(el => {
+        el.textContent = msg;
       });
     }
 
-    let _lastKnownVersion = null;
-
-    async function loadState(silent) {
-      if (!silent) setSyncUI('loading', 'Loading shared state...');
+    async function loadState() {
+      setSyncUI('loading', 'Connecting to shared storage…');
       try {
-        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
-          headers: { 'X-Access-Key': JSONBIN_API_KEY }
-        });
-        const data = await response.json();
-        if (data && data.record) {
-          const incoming = JSON.stringify(data.record);
-          const current = JSON.stringify(state);
-          // Only re-render if something changed (avoids flicker on polling)
-          if (incoming !== current) {
-            state = data.record;
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-            renderAll();
-          }
-          _lastKnownVersion = incoming;
+        const res = await fetch(FB_URL);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const data = await res.json();
+        if (data && typeof data === 'object') {
+          state = data;
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
         }
-        setSyncUI('ok', 'Synced · shared across all devices');
+        setSyncUI('ok', 'Live · synced across all devices');
       } catch (e) {
-        console.error('JSONBin load error:', e);
-        if (!silent) {
-          // Fall back to local storage on first load
-          try {
-            const res = localStorage.getItem(STORAGE_KEY);
-            if (res) state = JSON.parse(res);
-          } catch (_) {}
-          setSyncUI('error', 'Sync failed · showing local backup');
-          renderAll();
-        } else {
-          setSyncUI('error', 'Sync failed · retrying…');
-        }
+        console.error('Firebase load error:', e);
+        try {
+          const local = localStorage.getItem(STORAGE_KEY);
+          if (local) state = JSON.parse(local);
+        } catch (_) {}
+        setSyncUI('error', 'Offline · showing local backup');
       }
+      renderAll();
+      startPolling();
     }
 
     async function saveState() {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      setSyncUI('loading', 'Saving…');
       try {
-        setSyncUI('loading', 'Saving…');
-        await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
+        const res = await fetch(FB_URL, {
           method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-Access-Key': JSONBIN_API_KEY
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(state)
         });
+        if (!res.ok) throw new Error('HTTP ' + res.status);
         setSyncUI('ok', 'Saved · synced across all devices');
       } catch (e) {
-        console.error('JSONBin save error:', e);
-        setSyncUI('error', 'Save failed · stored locally as backup');
+        console.error('Firebase save error:', e);
+        setSyncUI('error', 'Save failed · stored locally');
       }
     }
 
-    // Poll every 15 seconds so changes from other devices appear automatically
+    // Poll every 12 seconds — picks up changes made on other devices/laptops
     function startPolling() {
-      setInterval(() => loadState(true), 15000);
+      setInterval(async () => {
+        try {
+          const res = await fetch(FB_URL);
+          if (!res.ok) return;
+          const data = await res.json();
+          if (data && typeof data === 'object') {
+            const incoming = JSON.stringify(data);
+            const current  = JSON.stringify(state);
+            if (incoming !== current) {
+              state = data;
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+              renderAll(); // re-render only when remote has new data
+            }
+          }
+          setSyncUI('ok', 'Live · synced across all devices');
+        } catch (_) {
+          setSyncUI('error', 'Sync lost · retrying…');
+        }
+      }, 12000);
     }
 
     function allTaskIds() {
@@ -1733,7 +1736,7 @@
       updateGlobalBar();
     }
 
-    loadState(false).then(startPolling);
+    loadState();
   </script>
 </body>
 
