@@ -1541,8 +1541,9 @@
 
     function setSyncUI(s, msg) {
       syncStatus = s;
-      const dots = document.querySelectorAll('.sync-dot');
-      const lbls = document.querySelectorAll('.sync-label');
+      // Support both id and class selectors
+      const dots = document.querySelectorAll('.sync-dot, #sync-dot');
+      const lbls = document.querySelectorAll('.sync-label, #sync-label');
       dots.forEach(dot => {
         dot.className = 'sync-dot' + (s === 'ok' ? '' : s === 'loading' ? ' loading' : ' error');
       });
@@ -1551,50 +1552,47 @@
       });
     }
 
-    async function loadState() {
-      if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-        try {
-          const res = localStorage.getItem(STORAGE_KEY);
-          if (res) state = JSON.parse(res);
-          setSyncUI('error', 'Shared sync not configured. Saving locally.');
-        } catch (e) {
-          state = {};
-          setSyncUI('error', 'Local storage disabled');
-        }
-        renderAll();
-        return;
-      }
+    let _lastKnownVersion = null;
 
+    async function loadState(silent) {
+      if (!silent) setSyncUI('loading', 'Loading shared state...');
       try {
-        setSyncUI('loading', 'Loading shared state...');
         const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}/latest`, {
           headers: { 'X-Access-Key': JSONBIN_API_KEY }
         });
         const data = await response.json();
         if (data && data.record) {
-          state = data.record;
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); // local backup
+          const incoming = JSON.stringify(data.record);
+          const current = JSON.stringify(state);
+          // Only re-render if something changed (avoids flicker on polling)
+          if (incoming !== current) {
+            state = data.record;
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+            renderAll();
+          }
+          _lastKnownVersion = incoming;
         }
-        setSyncUI('ok', 'Synced globally (Live)');
+        setSyncUI('ok', 'Synced · shared across all devices');
       } catch (e) {
         console.error('JSONBin load error:', e);
-        const res = localStorage.getItem(STORAGE_KEY);
-        if (res) state = JSON.parse(res);
-        setSyncUI('error', 'Global sync failed. Showing local backup.');
+        if (!silent) {
+          // Fall back to local storage on first load
+          try {
+            const res = localStorage.getItem(STORAGE_KEY);
+            if (res) state = JSON.parse(res);
+          } catch (_) {}
+          setSyncUI('error', 'Sync failed · showing local backup');
+          renderAll();
+        } else {
+          setSyncUI('error', 'Sync failed · retrying…');
+        }
       }
-      renderAll();
     }
 
     async function saveState() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); // Always save local backup
-
-      if (JSONBIN_BIN_ID === 'YOUR_BIN_ID_HERE') {
-        setSyncUI('ok', 'Saved locally (Shared sync not configured)');
-        return;
-      }
-
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       try {
-        setSyncUI('loading', 'Syncing globally...');
+        setSyncUI('loading', 'Saving…');
         await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_BIN_ID}`, {
           method: 'PUT',
           headers: {
@@ -1603,11 +1601,16 @@
           },
           body: JSON.stringify(state)
         });
-        setTimeout(() => { setSyncUI('ok', 'Synced globally (Live)'); }, 300);
+        setSyncUI('ok', 'Saved · synced across all devices');
       } catch (e) {
         console.error('JSONBin save error:', e);
-        setSyncUI('error', 'Global sync failed. Saved locally.');
+        setSyncUI('error', 'Save failed · stored locally as backup');
       }
+    }
+
+    // Poll every 15 seconds so changes from other devices appear automatically
+    function startPolling() {
+      setInterval(() => loadState(true), 15000);
     }
 
     function allTaskIds() {
@@ -1730,7 +1733,7 @@
       updateGlobalBar();
     }
 
-    loadState();
+    loadState(false).then(startPolling);
   </script>
 </body>
 
