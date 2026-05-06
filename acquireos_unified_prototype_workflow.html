@@ -1,0 +1,391 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --c-gold:#C9913A;--c-gold-light:#F5E8D0;--c-gold-dark:#8B5E1A;
+    --c-teal:#1A7F6E;--c-teal-light:#D0EEEA;--c-teal-dark:#0D4E43;
+    --c-blue:#1B5FAB;--c-blue-light:#D5E4F5;--c-blue-dark:#0D3A6E;
+    --c-slate:#3D4E68;--c-slate-light:#E6EAF0;
+    --c-red:#B03030;--c-red-light:#F5DADA;
+    --c-purple:#5B3D9E;--c-purple-light:#E8E2F7;
+  }
+  body{font-family:'DM Sans',sans-serif;background:transparent;color:var(--color-text-primary)}
+  .root{padding:0 0 2rem}
+
+  /* HEADER */
+  .header{display:flex;align-items:center;gap:16px;margin-bottom:28px;padding-bottom:20px;border-bottom:0.5px solid var(--color-border-tertiary)}
+  .logo{font-family:'Space Mono',monospace;font-size:11px;font-weight:700;letter-spacing:0.08em;color:var(--c-gold);background:var(--c-gold-light);padding:6px 12px;border-radius:6px;white-space:nowrap}
+  .header-text h1{font-size:17px;font-weight:500;color:var(--color-text-primary)}
+  .header-text p{font-size:12px;color:var(--color-text-secondary);margin-top:2px}
+  .badges{display:flex;gap:8px;margin-left:auto}
+  .badge{font-size:11px;font-weight:500;padding:4px 10px;border-radius:20px;white-space:nowrap}
+  .badge-gold{background:var(--c-gold-light);color:var(--c-gold-dark)}
+  .badge-teal{background:var(--c-teal-light);color:var(--c-teal-dark)}
+
+  /* PHASE HEADER */
+  .phase{margin-bottom:24px}
+  .phase-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+  .phase-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+  .phase-title{font-size:13px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--color-text-secondary)}
+  .phase-dates{font-family:'Space Mono',monospace;font-size:11px;color:var(--color-text-tertiary);margin-left:auto}
+
+  /* DAILY RHYTHM STRIP */
+  .rhythm-strip{display:flex;gap:8px;margin-bottom:28px;background:var(--color-background-secondary);border-radius:10px;padding:12px 16px;align-items:center;flex-wrap:wrap}
+  .rhythm-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary)}
+  .rhythm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+  .rhythm-sep{color:var(--color-border-secondary);font-size:14px;user-select:none}
+  .rhythm-label{font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--color-text-tertiary);margin-right:4px}
+
+  /* WORKFLOW MODULES */
+  .workflow-flow{display:flex;flex-direction:column;gap:0;margin-bottom:28px}
+  .flow-row{display:flex;align-items:stretch;position:relative}
+  .flow-connector{width:2px;background:var(--color-border-tertiary);margin:0 auto;min-height:8px}
+  .flow-modules{display:flex;gap:8px;flex:1;flex-wrap:wrap}
+  .module-card{flex:1;min-width:120px;background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:10px 12px;position:relative}
+  .module-card.gold{border-left:3px solid var(--c-gold);background:var(--c-gold-light)}
+  .module-card.teal{border-left:3px solid var(--c-teal);background:var(--c-teal-light)}
+  .module-card.blue{border-left:3px solid var(--c-blue);background:var(--c-blue-light)}
+  .module-card.red{border-left:3px solid var(--c-red);background:var(--c-red-light)}
+  .module-card.purple{border-left:3px solid var(--c-purple);background:var(--c-purple-light)}
+  .module-name{font-size:12px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px}
+  .module-sub{font-size:11px;color:var(--color-text-secondary)}
+  .flow-arrow{text-align:center;padding:4px 0;color:var(--color-text-tertiary);font-size:16px;line-height:1}
+
+  /* DAY PLAN TABLE */
+  .day-table{width:100%;border-collapse:collapse;font-size:12px;margin-bottom:24px}
+  .day-table thead tr{border-bottom:1px solid var(--color-border-secondary)}
+  .day-table th{text-align:left;font-size:11px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:var(--color-text-tertiary);padding:0 8px 8px}
+  .day-table td{padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top}
+  .day-table tr:last-child td{border-bottom:none}
+  .day-cell{font-family:'Space Mono',monospace;font-size:11px;white-space:nowrap;padding-right:4px}
+  .tag{display:inline-block;font-size:10px;font-weight:600;padding:2px 7px;border-radius:20px;margin:1px 2px 1px 0;white-space:nowrap}
+  .tag-gold{background:var(--c-gold-light);color:var(--c-gold-dark)}
+  .tag-teal{background:var(--c-teal-light);color:var(--c-teal-dark)}
+  .tag-blue{background:var(--c-blue-light);color:var(--c-blue-dark)}
+  .tag-purple{background:var(--c-purple-light);color:var(--c-purple)}
+  .tag-red{background:var(--c-red-light);color:var(--c-red)}
+  .deliverable{font-size:11px;color:var(--color-text-secondary)}
+  .highlight-row td{background:var(--c-teal-light) !important}
+  .prototype-row td{background:#E8F5E9 !important}
+  .final-row td{background:var(--c-gold-light) !important}
+
+  /* MODULE COVERAGE */
+  .module-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;margin-bottom:24px}
+  .mod-item{background:var(--color-background-secondary);border-radius:8px;padding:8px 10px;display:flex;align-items:center;gap:8px}
+  .mod-check{width:18px;height:18px;border-radius:50%;background:var(--c-teal-light);color:var(--c-teal-dark);font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .mod-name{font-size:11px;color:var(--color-text-primary);line-height:1.3}
+  .mod-day{font-family:'Space Mono',monospace;font-size:10px;color:var(--color-text-tertiary)}
+
+  /* STACK */
+  .stack-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .stack-pill{font-size:11px;padding:5px 12px;border-radius:20px;background:var(--color-background-secondary);color:var(--color-text-secondary);border:0.5px solid var(--color-border-tertiary)}
+  .stack-pill b{color:var(--color-text-primary);font-weight:500}
+
+  /* SIMULATION BOX */
+  .sim-box{background:var(--color-background-secondary);border-radius:10px;padding:14px 16px;margin-bottom:24px}
+  .sim-title{font-size:12px;font-weight:600;color:var(--color-text-primary);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .sim-steps{display:flex;gap:0;flex-wrap:wrap}
+  .sim-step{flex:1;min-width:100px;padding:8px 10px;border-right:0.5px solid var(--color-border-tertiary);position:relative}
+  .sim-step:last-child{border-right:none}
+  .sim-num{font-family:'Space Mono',monospace;font-size:10px;color:var(--c-teal);font-weight:700;margin-bottom:2px}
+  .sim-name{font-size:11px;font-weight:500;color:var(--color-text-primary)}
+  .sim-desc{font-size:10px;color:var(--color-text-secondary);margin-top:2px}
+
+  /* SECTION LABEL */
+  .sec-label{font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-text-tertiary);margin:0 0 10px}
+
+  /* SUMMARY CARDS */
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:8px}
+  .sum-card{background:var(--color-background-secondary);border-radius:10px;padding:12px 14px;text-align:center}
+  .sum-num{font-family:'Space Mono',monospace;font-size:22px;font-weight:700;color:var(--color-text-primary)}
+  .sum-label{font-size:11px;color:var(--color-text-secondary);margin-top:2px}
+</style>
+
+<div class="root">
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">ACQUIRE OS AI™</div>
+    <div class="header-text">
+      <h1>Unified Frontend Prototype Workflow</h1>
+      <p>React-only · All data mocked · May 8 → May 20, 2026</p>
+    </div>
+    <div class="badges">
+      <span class="badge badge-teal">Prototype: May 15</span>
+      <span class="badge badge-gold">Hard Deadline: May 20</span>
+    </div>
+  </div>
+
+  <!-- DAILY RHYTHM -->
+  <p class="sec-label">Daily rhythm — every day May 8 onwards</p>
+  <div class="rhythm-strip">
+    <span class="rhythm-label">Every Day</span>
+    <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-gold)"></span>9:00–9:30 AM · Client meeting</div>
+    <span class="rhythm-sep">→</span>
+    <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-blue)"></span>9:30 AM–6:00 PM · React development</div>
+    <span class="rhythm-sep">→</span>
+    <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--c-teal)"></span>6:00–6:30 PM · PM sync</div>
+    <span class="rhythm-sep">→</span>
+    <div class="rhythm-item"><span class="rhythm-dot" style="background:var(--color-border-secondary)"></span>Evening · Update task board</div>
+  </div>
+
+  <!-- INTEGRATED WORKFLOW -->
+  <p class="sec-label">Integrated module flow (complete user journey)</p>
+  <div class="workflow-flow" style="margin-bottom:24px">
+    <div class="flow-modules">
+      <div class="module-card gold"><div class="module-name">Seller Uploads Deal</div><div class="module-sub">Mock drag & drop · Deal Intake</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card gold"><div class="module-name">Parsed Data Review</div><div class="module-sub">Editable fields · Confidence scores</div></div>
+      <div class="module-card gold"><div class="module-name">Admin Validation</div><div class="module-sub">Role-based approval · Mock</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card blue"><div class="module-name">Dashboard</div><div class="module-sub">Deal cards · Pipeline overview</div></div>
+      <div class="module-card blue"><div class="module-name">Market Intelligence</div><div class="module-sub">Mock market score cards</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card teal"><div class="module-name">AI Underwriting Engine</div><div class="module-sub">NOI · Cap Rate · Cash Flow · Mock</div></div>
+      <div class="module-card teal"><div class="module-name">Assumptions Editor</div><div class="module-sub">Sliders · Live recalculation</div></div>
+      <div class="module-card teal"><div class="module-name">Stress Test</div><div class="module-sub">Best / Base / Worst scenarios</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card teal"><div class="module-name">Deal Score & Verdict</div><div class="module-sub">Score · Strengths · Risks · Offer</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card purple"><div class="module-name">LOI Generator</div><div class="module-sub">Editable clauses · Version history · Mock PDF</div></div>
+      <div class="module-card purple"><div class="module-name">Lender Match</div><div class="module-sub">Fit score cards · Rules engine</div></div>
+      <div class="module-card purple"><div class="module-name">Loan Package</div><div class="module-sub">Exec summary · Mock download</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card blue"><div class="module-name">Outreach & Comms</div><div class="module-sub">Email / SMS templates</div></div>
+      <div class="module-card blue"><div class="module-name">Actions & Follow-up</div><div class="module-sub">Kanban pipeline · Task list</div></div>
+      <div class="module-card blue"><div class="module-name">Activity Log</div><div class="module-sub">Timeline · Notes · Comments</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card gold"><div class="module-name">PSA Assistant</div><div class="module-sub">Draft generator · Editable</div></div>
+      <div class="module-card gold"><div class="module-name">Escrow Tracker</div><div class="module-sub">Title Company Simulator</div></div>
+      <div class="module-card gold"><div class="module-name">Due Diligence</div><div class="module-sub">Interactive checklist</div></div>
+      <div class="module-card gold"><div class="module-name">Financing & Closing</div><div class="module-sub">Progress milestone flow</div></div>
+    </div>
+    <div class="flow-arrow">↓</div>
+    <div class="flow-modules">
+      <div class="module-card teal"><div class="module-name">Asset Plan & Hold</div><div class="module-sub">Business plan UI</div></div>
+      <div class="module-card teal"><div class="module-name">Exit Strategy</div><div class="module-sub">Scenario modeling · Projections</div></div>
+    </div>
+  </div>
+
+  <!-- TITLE COMPANY SIMULATION -->
+  <p class="sec-label">Title company workflow — simulated inside Escrow Tracker (Day 7)</p>
+  <div class="sim-box">
+    <div class="sim-steps">
+      <div class="sim-step"><div class="sim-num">01</div><div class="sim-name">Open Escrow</div><div class="sim-desc">Submit contract · GF number · Assign officer</div></div>
+      <div class="sim-step"><div class="sim-num">02</div><div class="sim-name">Title Search</div><div class="sim-desc">Mock chain of title · Liens / taxes found</div></div>
+      <div class="sim-step"><div class="sim-num">03</div><div class="sim-name">Clear Title</div><div class="sim-desc">Interactive checklist · Resolve issues</div></div>
+      <div class="sim-step"><div class="sim-num">04</div><div class="sim-name">Closing Prep</div><div class="sim-desc">Closing disclosure preview · Settlement</div></div>
+      <div class="sim-step"><div class="sim-num">05</div><div class="sim-name">Signing Day</div><div class="sim-desc">Doc signing simulation · Funds verify</div></div>
+      <div class="sim-step"><div class="sim-num">06</div><div class="sim-name">Post-Closing</div><div class="sim-desc">Record deed · Issue policy</div></div>
+    </div>
+  </div>
+
+  <!-- DAY PLAN TABLE -->
+  <p class="sec-label">Day-by-day prototype plan — May 8 to May 15</p>
+  <table class="day-table">
+    <thead>
+      <tr>
+        <th style="width:72px">Day</th>
+        <th style="width:80px">Date</th>
+        <th>Modules</th>
+        <th>React tasks</th>
+        <th>Deliverable by 6 PM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="day-cell">Day 1</td>
+        <td class="day-cell">May 8 Fri</td>
+        <td>
+          <span class="tag tag-gold">User Roles</span>
+          <span class="tag tag-gold">Dashboard</span>
+          <span class="tag tag-gold">Deal Intake</span>
+          <span class="tag tag-gold">Parsed Data Review</span>
+        </td>
+        <td class="deliverable">Login / role selector · Dashboard layout · Drag & drop upload (mock) · Editable parsed fields with confidence scores · Approval button</td>
+        <td class="deliverable">Working role-based dashboard + deal upload + parsed data review UI</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 2</td>
+        <td class="day-cell">May 9 Sat</td>
+        <td>
+          <span class="tag tag-teal">AI Underwriting</span>
+          <span class="tag tag-teal">Assumptions Editor</span>
+          <span class="tag tag-teal">Stress Test</span>
+        </td>
+        <td class="deliverable">Underwriting results screen · Sliders / inputs for assumptions with live recalc · 3-scenario stress test tab with charts + breakpoint alerts</td>
+        <td class="deliverable">Assumptions editor + stress test working end-to-end with mock logic</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 3</td>
+        <td class="day-cell">May 10 Sun</td>
+        <td>
+          <span class="tag tag-teal">Deal Score & Verdict</span>
+          <span class="tag tag-blue">Market Intelligence</span>
+        </td>
+        <td class="deliverable">Deal score card with resilience score · Verdict banner · Strengths / risks display · Base / Aggressive / Safe offer cards · Market score cards (mock data)</td>
+        <td class="deliverable">Full deal score + multi-scenario offer + market view live</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 4</td>
+        <td class="day-cell">May 11 Mon</td>
+        <td>
+          <span class="tag tag-purple">LOI Generator</span>
+          <span class="tag tag-blue">Outreach & Comms</span>
+        </td>
+        <td class="deliverable">LOI form with editable clauses · Live preview · Mock PDF download · Version history list + "save version" · Email / SMS template preview</td>
+        <td class="deliverable">LOI with versioning feel + outreach templates ready</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 5</td>
+        <td class="day-cell">May 12 Tue</td>
+        <td>
+          <span class="tag tag-purple">Lender Match</span>
+          <span class="tag tag-purple">Loan Package</span>
+        </td>
+        <td class="deliverable">Lender match cards with fit scores + rule chips · Lender detail modal · Loan package preview (exec summary + financials) · Mock download button</td>
+        <td class="deliverable">Lender recommendations + loan package preview working</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 6</td>
+        <td class="day-cell">May 13 Wed</td>
+        <td>
+          <span class="tag tag-blue">Pipeline</span>
+          <span class="tag tag-blue">Actions & Follow-up</span>
+          <span class="tag tag-blue">Activity Log</span>
+        </td>
+        <td class="deliverable">Kanban pipeline with drag & drop · Task list per deal · Activity log timeline · Notes / comments per deal</td>
+        <td class="deliverable">Functional pipeline + tasks + activity log connected</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Day 7</td>
+        <td class="day-cell">May 14 Thu</td>
+        <td>
+          <span class="tag tag-gold">PSA Assistant</span>
+          <span class="tag tag-gold">Escrow Tracker</span>
+          <span class="tag tag-gold">Due Diligence</span>
+          <span class="tag tag-gold">Financing & Closing</span>
+        </td>
+        <td class="deliverable">PSA draft generator screen · Full title company 6-step wizard simulator · DD interactive checklist · Financing milestones progress view</td>
+        <td class="deliverable">PSA + complete title company simulation + DD + closing flow</td>
+      </tr>
+      <tr class="prototype-row">
+        <td class="day-cell"><b>Day 8</b></td>
+        <td class="day-cell"><b>May 15 Fri</b></td>
+        <td>
+          <span class="tag tag-teal">Asset Plan & Hold</span>
+          <span class="tag tag-teal">Exit Strategy</span>
+          <span class="tag tag-teal">Full Integration</span>
+        </td>
+        <td class="deliverable">Asset business plan UI · Exit scenario modeler · Connect all screens end-to-end · Responsive polish · Final UI consistency pass</td>
+        <td class="deliverable"><b>PROTOTYPE READY — Full demoable React app · All 18 modules connected</b></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- BUFFER DAYS -->
+  <p class="sec-label">Buffer phase — May 16 to May 20</p>
+  <table class="day-table">
+    <thead>
+      <tr>
+        <th style="width:72px">Day</th>
+        <th style="width:80px">Date</th>
+        <th>Focus</th>
+        <th>Key activities</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="day-cell">Buffer 1</td>
+        <td class="day-cell">May 16 Sat</td>
+        <td><span class="tag tag-blue">UI / UX Polish</span></td>
+        <td class="deliverable">Design consistency pass · Loading states · Mobile responsiveness · Better spacing + micro-interactions</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Buffer 2</td>
+        <td class="day-cell">May 17 Sun</td>
+        <td><span class="tag tag-blue">Performance + Bugs</span></td>
+        <td class="deliverable">Fix issues from May 15 demo · Performance optimisation · Error handling · Edge case coverage</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Buffer 3</td>
+        <td class="day-cell">May 18 Mon</td>
+        <td><span class="tag tag-gold">Documentation</span></td>
+        <td class="deliverable">User guide · Loom demo walkthrough video · Component notes for dev handoff</td>
+      </tr>
+      <tr>
+        <td class="day-cell">Buffer 4</td>
+        <td class="day-cell">May 19 Tue</td>
+        <td><span class="tag tag-teal">Final Testing</span></td>
+        <td class="deliverable">Full regression test · Incorporate client feedback from May 15 · Accessibility check</td>
+      </tr>
+      <tr class="final-row">
+        <td class="day-cell"><b>Buffer 5</b></td>
+        <td class="day-cell"><b>May 20 Wed</b></td>
+        <td><span class="tag tag-gold">FINAL DELIVERY</span></td>
+        <td class="deliverable"><b>Production deploy · Final client presentation · Project handover — HARD DEADLINE</b></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- MODULE COVERAGE -->
+  <p class="sec-label">All 18 modules covered</p>
+  <div class="module-grid">
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">User Roles & Permissions</div><div class="mod-day">May 8</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Deal Dashboard</div><div class="mod-day">May 8</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Deal Intake & Lead Gen</div><div class="mod-day">May 8</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Parsed Data Review</div><div class="mod-day">May 8</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">AI Underwriting Engine</div><div class="mod-day">May 9</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Assumptions Editor</div><div class="mod-day">May 9</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Stress Test</div><div class="mod-day">May 9</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Deal Score & Verdict</div><div class="mod-day">May 10</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Market Intelligence</div><div class="mod-day">May 10</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">LOI Generator</div><div class="mod-day">May 11</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Outreach & Comms</div><div class="mod-day">May 11</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Lender Match Engine</div><div class="mod-day">May 12</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Loan Package Gen</div><div class="mod-day">May 12</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Pipeline + Tasks + Log</div><div class="mod-day">May 13</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">PSA Assistant</div><div class="mod-day">May 14</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Escrow + Title Simulator</div><div class="mod-day">May 14</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Due Diligence</div><div class="mod-day">May 14</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Financing & Closing</div><div class="mod-day">May 14</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Asset Plan & Hold</div><div class="mod-day">May 15</div></div></div>
+    <div class="mod-item"><div class="mod-check">✓</div><div><div class="mod-name">Exit Strategy</div><div class="mod-day">May 15</div></div></div>
+  </div>
+
+  <!-- TECH STACK -->
+  <p class="sec-label">Frontend-only tech stack</p>
+  <div class="stack-row">
+    <span class="stack-pill"><b>React + Vite</b></span>
+    <span class="stack-pill"><b>Tailwind CSS</b></span>
+    <span class="stack-pill"><b>React Router</b></span>
+    <span class="stack-pill"><b>Zustand</b> · global state</span>
+    <span class="stack-pill"><b>React Hook Form + Zod</b></span>
+    <span class="stack-pill"><b>Recharts</b> · stress test charts</span>
+    <span class="stack-pill"><b>Lucide React</b> · icons</span>
+    <span class="stack-pill"><b>react-hot-toast</b></span>
+    <span class="stack-pill"><b>Mock AI logic</b> · JS functions</span>
+    <span class="stack-pill"><b>No backend · No API · No storage</b></span>
+  </div>
+
+  <!-- SUMMARY -->
+  <div class="summary-grid">
+    <div class="sum-card"><div class="sum-num">8</div><div class="sum-label">Dev days to prototype</div></div>
+    <div class="sum-card"><div class="sum-num">20</div><div class="sum-label">Modules in prototype</div></div>
+    <div class="sum-card"><div class="sum-num">5</div><div class="sum-label">Buffer days for polish</div></div>
+  </div>
+</div>

@@ -1,0 +1,410 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:transparent;color:var(--color-text-primary)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+.wrap{padding:0 0 2.5rem}
+.top-header{margin-bottom:18px;padding-bottom:14px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.product-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;background:var(--color-background-secondary);color:var(--color-text-secondary);padding:3px 9px;border-radius:4px;margin-bottom:7px}
+.top-header h1{font-size:17px;font-weight:500;margin-bottom:3px}
+.top-header p{font-size:12px;color:var(--color-text-secondary)}
+.sync-row{display:flex;align-items:center;gap:8px;margin-top:8px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--color-background-success);flex-shrink:0}
+.sync-dot.loading{background:#FAC775}
+.sync-dot.error{background:#F09595}
+.sync-label{font-size:11px;color:var(--color-text-tertiary)}
+.deal-strip{display:flex;flex-wrap:wrap;gap:10px;padding:10px 14px;background:var(--color-background-secondary);border-radius:8px;margin-bottom:16px}
+.df{display:flex;flex-direction:column;gap:1px}
+.dk{font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.dv{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+.global-bar-wrap{display:flex;align-items:center;gap:12px;margin-bottom:18px;padding:10px 14px;background:var(--color-background-secondary);border-radius:8px}
+.gb-label{font-size:11px;color:var(--color-text-secondary);white-space:nowrap}
+.gb-track{flex:1;height:5px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.gb-fill{height:100%;border-radius:3px;background:var(--color-background-success);transition:width 0.35s}
+.gb-count{font-size:12px;font-weight:500;color:var(--color-text-primary);min-width:44px;text-align:right}
+.phase-sep{display:flex;align-items:center;gap:10px;margin:20px 0 10px}
+.ph-num{font-size:10px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-text-tertiary);white-space:nowrap}
+.ph-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);white-space:nowrap}
+.ph-line{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+.day-block{margin-bottom:8px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden}
+.day-hdr{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--color-background-secondary);cursor:pointer;user-select:none}
+.day-hdr:hover{background:var(--color-background-tertiary)}
+.dpill{font-size:9px;font-weight:700;padding:3px 8px;border-radius:20px;flex-shrink:0;white-space:nowrap}
+.p1c{background:#E1F5EE;color:#0F6E56}
+.p2c{background:#E6F1FB;color:#185FA5}
+.p3c{background:#E8E2F7;color:#5B3D9E}
+.p4c{background:#FAEEDA;color:#854F0B}
+.bufc{background:#F1EFE8;color:#5F5E5A}
+.deadline-pill{background:#FAEEDA;color:#854F0B;border:1.5px solid #EF9F27}
+.day-theme{font-size:12px;font-weight:500;color:var(--color-text-primary);flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.day-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.prog-txt{font-size:11px;color:var(--color-text-tertiary)}
+.mini-prog{width:36px;height:4px;background:var(--color-border-tertiary);border-radius:2px;overflow:hidden}
+.mini-fill{height:100%;border-radius:2px;background:var(--color-background-success);transition:width 0.3s}
+.chev{font-size:11px;color:var(--color-text-tertiary);transition:transform 0.18s;flex-shrink:0}
+.chev.open{transform:rotate(180deg)}
+.mod-tags{display:flex;flex-wrap:wrap;gap:4px;padding:7px 13px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.mtag{font-size:10px;padding:2px 7px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+.tasks-body{padding:4px 13px 8px}
+.task-row{display:flex;align-items:flex-start;gap:9px;padding:6px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.task-row:last-child{border-bottom:none}
+.task-row:hover .ttext{color:var(--color-text-primary)}
+.tcb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:var(--color-text-success);transition:all 0.15s}
+.tcb.done{background:var(--color-background-success);border-color:var(--color-border-success)}
+.ttext{font-size:12px;color:var(--color-text-secondary);line-height:1.5;transition:color 0.15s}
+.ttext.done{text-decoration:line-through;opacity:0.45}
+.tout{font-size:10px;color:var(--color-text-tertiary);margin-top:1px}
+.deliv-bar{display:flex;align-items:flex-start;gap:8px;padding:8px 13px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary)}
+.deliv-arrow{font-size:11px;color:var(--color-text-tertiary);flex-shrink:0;margin-top:1px}
+.deliv-txt{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+.deliv-txt b{color:var(--color-text-primary);font-weight:500}
+.rule-box{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 13px;margin:16px 0 8px;background:var(--color-background-secondary)}
+.rule-lbl{font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:5px}
+.rule-txt{font-size:11px;color:var(--color-text-secondary);line-height:1.6}
+.out-block{border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 13px;margin-top:8px}
+.out-lbl{font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:7px}
+.out-item{display:flex;gap:7px;font-size:11px;color:var(--color-text-tertiary);padding:3px 0;line-height:1.4}
+.out-x{color:var(--color-text-danger);flex-shrink:0}
+</style>
+
+<h2 class="sr-only">AcquireOS AI MVP Sprint — persistent shared checklist tracking prototype build from May 8 to May 20</h2>
+
+<div class="wrap">
+  <div class="top-header">
+    <div class="product-tag">AcquireOS AI™ · MVP Sprint</div>
+    <h1>Prototype Build Checklist</h1>
+    <p>Frontend-only React prototype · Prototype deadline May 15 · Hard deadline May 20</p>
+    <div class="sync-row">
+      <div class="sync-dot loading" id="sync-dot"></div>
+      <span class="sync-label" id="sync-label">Connecting to shared storage...</span>
+    </div>
+  </div>
+
+  <div class="deal-strip">
+    <div class="df"><div class="dk">Property</div><div class="dv">Sunset Apartments</div></div>
+    <div class="df"><div class="dk">Location</div><div class="dv">Dallas, Texas</div></div>
+    <div class="df"><div class="dk">Units</div><div class="dv">120 · Multifamily</div></div>
+    <div class="df"><div class="dk">Asking</div><div class="dv">$12,900,000</div></div>
+    <div class="df"><div class="dk">NOI</div><div class="dv">$775,000</div></div>
+    <div class="df"><div class="dk">Purpose</div><div class="dv">Flows through all 16 modules</div></div>
+  </div>
+
+  <div class="global-bar-wrap">
+    <span class="gb-label">Overall progress</span>
+    <div class="gb-track"><div class="gb-fill" id="gb-fill" style="width:0%"></div></div>
+    <span class="gb-count" id="gb-count">— / —</span>
+  </div>
+
+  <div id="cl-root"></div>
+
+  <div class="rule-box">
+    <div class="rule-lbl">The one rule for this sprint</div>
+    <div class="rule-txt">Every feature we build must work end-to-end and be demonstrable. No half-built features. If we build it, it must run. If we cannot finish it fully, we show a clean placeholder screen — not broken code.</div>
+  </div>
+
+  <div class="out-block">
+    <div class="out-lbl">Explicitly out of scope</div>
+    <div class="out-item"><span class="out-x">✗</span>Real broker email integration (Gmail / Outlook)</div>
+    <div class="out-item"><span class="out-x">✗</span>Live real estate listing API connections (CREXi / LoopNet)</div>
+    <div class="out-item"><span class="out-x">✗</span>DocuSign / e-signature integration</div>
+    <div class="out-item"><span class="out-x">✗</span>Real lender API connections or rate feeds</div>
+    <div class="out-item"><span class="out-x">✗</span>Native mobile application</div>
+    <div class="out-item"><span class="out-x">✗</span>Multi-user collaboration features</div>
+    <div class="out-item"><span class="out-x">✗</span>Automated task completion detection</div>
+  </div>
+</div>
+
+<script>
+const DATA = [
+  {phase:'Phase 1',phaseTitle:'Foundation',pill:'p1c',days:[
+    {id:'d1',date:'May 8 — Fri',theme:'User Roles · Dashboard · Deal Intake · Parsed Data Review',
+     modules:['User Roles & Permissions','Deal Dashboard','Deal Intake','Parsed Data Review'],
+     tasks:[
+       {id:'d1t1',t:'Build login / role selector screen (Buyer / Seller / Admin)',o:'Role-based UI loads correctly'},
+       {id:'d1t2',t:'Build main Dashboard layout — pipeline bar + KPI card shells',o:'Dashboard visible in browser'},
+       {id:'d1t3',t:'Build drag & drop upload UI (mock — no real storage)',o:'User can upload 3 mock files'},
+       {id:'d1t4',t:'Build Parsed Data tabs with editable fields',o:'Extracted fields visible and editable'},
+       {id:'d1t5',t:'Add confidence score indicators per field',o:'Each field shows a mock confidence %'},
+       {id:'d1t6',t:'Add Approve / Reject button for Admin role',o:'Admin can approve a deal'},
+     ],deliv:'Working role-based dashboard + deal upload + parsed data review UI'},
+  ]},
+  {phase:'Phase 2',phaseTitle:'Core Intelligence Engine',pill:'p2c',days:[
+    {id:'d2',date:'May 9 — Sat',theme:'AI Underwriting Engine · Assumptions Editor · Stress Test',
+     modules:['AI Underwriting Engine (M4)','Assumptions Editor','Stress Test'],
+     tasks:[
+       {id:'d2t1',t:'Build underwriting results screen — NOI, Cap Rate, DSCR, CoC, IRR cards',o:'8 metrics visible with mock values'},
+       {id:'d2t2',t:'Build 10-year cash flow proforma table (mock data)',o:'Year-by-year projection table rendered'},
+       {id:'d2t3',t:'Build Assumptions Editor — sliders / inputs that live-recalculate metrics',o:'Change a slider and numbers update instantly'},
+       {id:'d2t4',t:'Build Stress Test tab — Best / Base / Worst scenario cards',o:'3 scenario cards visible side by side'},
+       {id:'d2t5',t:'Add breakpoint alerts (e.g. DSCR below 1.2 warning)',o:'Warning badge fires on threshold'},
+       {id:'d2t6',t:'Add bar/line chart for scenario comparison (Recharts)',o:'Chart renders with mock scenario data'},
+     ],deliv:'Assumptions editor + stress test working end-to-end with mock logic'},
+    {id:'d3',date:'May 10 — Sun',theme:'Deal Score & Verdict · Market Intelligence',
+     modules:['Deal Score & Verdict (M5)','Market Intelligence (M2)'],
+     tasks:[
+       {id:'d3t1',t:'Build Deal Score gauge — 0-100 visual dial or score card',o:'78/100 score displays'},
+       {id:'d3t2',t:'Build Verdict banner (green/yellow/red) with plain-English text',o:'Verdict: Strong potential with manageable risks'},
+       {id:'d3t3',t:'Build Resilience Score indicator',o:'Stress resilience score visible'},
+       {id:'d3t4',t:'Build Strengths list with green checkmarks (mock AI output)',o:'3–5 strengths listed'},
+       {id:'d3t5',t:'Build Risks list with warning icons (mock AI output)',o:'3–5 risks listed'},
+       {id:'d3t6',t:'Build Recommended Offer section — Base / Aggressive / Safe cards',o:'3 offer scenarios with price ranges'},
+       {id:'d3t7',t:'Build Market Intelligence screen — 50-state score cards + ranking table',o:'State rankings visible with mock data'},
+     ],deliv:'Full deal score + multi-scenario offer + market view live'},
+    {id:'d4',date:'May 11 — Mon',theme:'Lender Match Engine · Loan Package Generator',
+     modules:['Lender Match Engine (M6)','Loan Package Generator (M7)'],
+     tasks:[
+       {id:'d4t1',t:'Build Lender Match cards — fit score + rule chips per lender',o:'Top 5 lenders ranked with scores'},
+       {id:'d4t2',t:'Add Best Fit Loan highlight card (LTV, Rate, Closing speed)',o:'Best Fit: Bridge 75% LTV 8.50% displayed'},
+       {id:'d4t3',t:'Add Why This Loan explanation block (mock AI paragraph)',o:'Plain-English reason visible'},
+       {id:'d4t4',t:'Add Lender detail modal on click',o:'Lender detail expands correctly'},
+       {id:'d4t5',t:'Build Loan Package preview — all 10 sections visible',o:'Exec Summary, T12, Market Overview etc. rendered'},
+       {id:'d4t6',t:'Add mock Download PDF button',o:'Button shows success toast on click'},
+     ],deliv:'Lender recommendations + loan package preview working'},
+  ]},
+  {phase:'Phase 3',phaseTitle:'Execution & Documents',pill:'p3c',days:[
+    {id:'d5',date:'May 12 — Tue',theme:'LOI Generator · Outreach & Communication',
+     modules:['LOI Generator (M10)','Outreach & Communication (M8)'],
+     tasks:[
+       {id:'d5t1',t:'Build LOI form — auto-filled fields from mock deal data',o:'All LOI fields pre-populated'},
+       {id:'d5t2',t:'Add AI term suggestion tooltips per field (mock)',o:'Suggestions appear next to relevant fields'},
+       {id:'d5t3',t:'Build LOI live preview panel',o:'Preview updates as user edits fields'},
+       {id:'d5t4',t:'Add Version History list + Save New Version button',o:'Version history saves and lists correctly'},
+       {id:'d5t5',t:'Add mock PDF Download button for LOI',o:'One-click download triggers toast'},
+       {id:'d5t6',t:'Build Outreach screen — Email / SMS / Call Script channel selector',o:'Three-panel UI with channel toggle'},
+       {id:'d5t7',t:'Add mock generated message panel with edit capability',o:'Message appears and is editable'},
+       {id:'d5t8',t:'Add Template Save + Template Library screen',o:'Templates saved and browsable'},
+     ],deliv:'LOI with versioning feel + outreach templates ready'},
+    {id:'d6',date:'May 13 — Wed',theme:'Actions & Follow-up · Pipeline · Activity Log',
+     modules:['Actions & Follow-up (M9)','Pipeline','Activity Log'],
+     tasks:[
+       {id:'d6t1',t:'Build AI Next Best Actions task list — priority badges (High / Medium / Low)',o:'6–8 prioritised tasks visible'},
+       {id:'d6t2',t:'Add Deal Momentum Score indicator',o:'72/100 Good Momentum shown'},
+       {id:'d6t3',t:'Build Kanban pipeline board — drag & drop between stages',o:'Deal cards draggable across columns'},
+       {id:'d6t4',t:'Build per-deal Task list with status toggle',o:'Tasks check off correctly'},
+       {id:'d6t5',t:'Build Activity Log timeline — actions recorded as user progresses',o:'Timeline entries appear as tasks complete'},
+       {id:'d6t6',t:'Add Notes / Comments section per deal',o:'User can add and save a note'},
+     ],deliv:'Functional pipeline + tasks + activity log all connected'},
+  ]},
+  {phase:'Phase 4',phaseTitle:'Post-LOI · Closing · Polish',pill:'p4c',days:[
+    {id:'d7',date:'May 14 — Thu',theme:'PSA Assistant · Escrow Tracker · Due Diligence · Financing & Closing',
+     modules:['PSA Assistant (M11)','Escrow Tracker (M12)','Due Diligence (M13)','Financing & Closing (M14)'],
+     tasks:[
+       {id:'d7t1',t:'Build PSA template selector (Standard / Value-Add / Stabilized)',o:'Correct template auto-selects based on deal type'},
+       {id:'d7t2',t:'Build PSA draft screen — all 9 sections populated from mock deal data',o:'No blank PSA fields in demo'},
+       {id:'d7t3',t:'Add AI risk flag banners on relevant PSA sections (yellow warnings)',o:'Flags appear in relevant sections'},
+       {id:'d7t4',t:'Add mock Word .docx Download button for PSA',o:'Export button present with disclaimer text'},
+       {id:'d7t5',t:'Build Escrow Tracker 6-step Title Company wizard simulator',o:'Open Escrow → Title Search → Clear → Closing Prep → Signing → Post-Closing'},
+       {id:'d7t6',t:'Add circular progress indicator + milestone table (color-coded)',o:'60% progress shown with green/orange/gray states'},
+       {id:'d7t7',t:'Add delay prediction alert for overdue milestones',o:'Alert fires when milestone exceeds benchmark'},
+       {id:'d7t8',t:'Build Due Diligence checklist — 9 items with status toggle + progress ring',o:'72% complete shown for demo deal'},
+       {id:'d7t9',t:'Build Financing & Closing progress screen — 6 steps with Closing Readiness Score',o:'67% progress, key loan summary visible'},
+     ],deliv:'PSA + full title company simulation + DD + closing flow complete'},
+    {id:'d8',date:'May 15 — Fri · PROTOTYPE DEADLINE',theme:'Asset Plan · Exit Strategy · Full Integration + Polish',
+     deadline:true,
+     modules:['Asset Plan & Hold (M15)','Exit Strategy (M16)','Full Integration'],
+     tasks:[
+       {id:'d8t1',t:'Build Asset Plan screen — 4 KPI progress bars + NOI Growth line chart',o:'CapEx 65%, Rents 70%, Expenses 60%, Mgmt 85%'},
+       {id:'d8t2',t:'Build Exit Strategy screen — 4 scenario cards (Sell / Refi / 1031 / Hold)',o:'Each card shows IRR + Equity Multiple + Net Proceeds'},
+       {id:'d8t3',t:'Add AI Recommended Exit banner (mock)',o:'Sell in Year 4 recommendation displayed'},
+       {id:'d8t4',t:'Connect all screens end-to-end — navigation flows without breaks',o:'Full deal journey works without any module crashing'},
+       {id:'d8t5',t:'Wire Dashboard KPI cards to mock global deal data',o:'48 deals, $78.4M total value, 6.45% avg cap rate shown'},
+       {id:'d8t6',t:'Load Sunset Apartments demo deal through all 16 modules',o:'One deal flows through the entire platform cleanly'},
+       {id:'d8t7',t:'Final UI consistency pass — spacing, typography, color, loading states',o:'No broken layouts or mismatched styles'},
+       {id:'d8t8',t:'Responsive check — key screens work at 1024px',o:'Nothing breaks on smaller viewports'},
+     ],deliv:'PROTOTYPE READY — Complete end-to-end React app · All 16 modules + Dashboard'},
+  ]},
+  {phase:'Buffer',phaseTitle:'Polish · Test · Deliver',pill:'bufc',days:[
+    {id:'d9',date:'May 16 — Sat · Buffer 1',theme:'UI / UX Polish & Consistency',modules:[],
+     tasks:[
+       {id:'d9t1',t:'Design consistency pass across all screens',o:''},
+       {id:'d9t2',t:'Add loading states and skeleton screens',o:''},
+       {id:'d9t3',t:'Improve micro-interactions and hover states',o:''},
+       {id:'d9t4',t:'Fix any mobile / responsive edge cases',o:''},
+     ],deliv:'Noticeably cleaner, more polished UI'},
+    {id:'d10',date:'May 17 — Sun · Buffer 2',theme:'Performance + Bug Fixing',modules:[],
+     tasks:[
+       {id:'d10t1',t:'Fix all issues surfaced during May 15 prototype demo',o:''},
+       {id:'d10t2',t:'Optimise slow-rendering screens',o:''},
+       {id:'d10t3',t:'Add error handling and empty state screens',o:''},
+       {id:'d10t4',t:'Cross-browser check (Chrome + Safari)',o:''},
+     ],deliv:'Stable, fast, crash-free app'},
+    {id:'d11',date:'May 18 — Mon · Buffer 3',theme:'Documentation + Demo Video',modules:[],
+     tasks:[
+       {id:'d11t1',t:'Write user guide covering all 16 modules',o:''},
+       {id:'d11t2',t:'Record Loom walkthrough video of full prototype',o:''},
+       {id:'d11t3',t:'Write component notes for dev handoff',o:''},
+     ],deliv:'Professional documentation + demo video ready'},
+    {id:'d12',date:'May 19 — Tue · Buffer 4',theme:'Final Testing + Client Feedback',modules:[],
+     tasks:[
+       {id:'d12t1',t:'Full regression test — every module, every interaction',o:''},
+       {id:'d12t2',t:'Incorporate feedback from May 15 prototype presentation',o:''},
+       {id:'d12t3',t:'Final accessibility check',o:''},
+     ],deliv:'Bug-free, client-feedback-incorporated version'},
+    {id:'d13',date:'May 20 — Wed · HARD DEADLINE',theme:'Final Delivery & Presentation',
+     deadline:true,modules:[],
+     tasks:[
+       {id:'d13t1',t:'Production deploy (Vercel + hosting)',o:''},
+       {id:'d13t2',t:'Final client presentation — walk through all 16 modules with Sunset Apartments',o:''},
+       {id:'d13t3',t:'Project handover — live URL, credentials, documentation',o:''},
+     ],deliv:'FINAL MVP DELIVERED — Live, polished, fully demoable'},
+  ]},
+];
+
+const STORAGE_KEY = 'acquireos_checklist_v2';
+let state = {};
+let syncStatus = 'loading';
+
+function setSyncUI(s, msg) {
+  syncStatus = s;
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot' + (s === 'ok' ? '' : s === 'loading' ? ' loading' : ' error');
+  lbl.textContent = msg;
+}
+
+async function loadState() {
+  try {
+    const res = await window.storage.get(STORAGE_KEY, true);
+    if (res && res.value) {
+      state = JSON.parse(res.value);
+    }
+    setSyncUI('ok', 'Synced — changes save automatically and are shared with everyone');
+  } catch(e) {
+    state = {};
+    setSyncUI('ok', 'Synced — changes save automatically and are shared with everyone');
+  }
+  renderAll();
+}
+
+async function saveState() {
+  try {
+    setSyncUI('loading', 'Saving...');
+    await window.storage.set(STORAGE_KEY, JSON.stringify(state), true);
+    setSyncUI('ok', 'Synced — changes save automatically and are shared with everyone');
+  } catch(e) {
+    setSyncUI('error', 'Save failed — check connection');
+  }
+}
+
+function allTaskIds() {
+  const ids = [];
+  DATA.forEach(ph => ph.days.forEach(d => d.tasks.forEach(t => ids.push(t.id))));
+  return ids;
+}
+
+function updateGlobalBar() {
+  const all = allTaskIds();
+  const done = all.filter(id => state[id]).length;
+  const pct = all.length ? Math.round(done / all.length * 100) : 0;
+  document.getElementById('gb-fill').style.width = pct + '%';
+  document.getElementById('gb-count').textContent = done + ' / ' + all.length;
+}
+
+function updateDayMini(dayId, tasks) {
+  const done = tasks.filter(t => state[t.id]).length;
+  const total = tasks.length;
+  const pct = total ? Math.round(done / total * 100) : 0;
+  const progEl = document.getElementById('prog-' + dayId);
+  const miniEl = document.getElementById('mini-' + dayId);
+  if (progEl) progEl.textContent = done + '/' + total;
+  if (miniEl) miniEl.style.width = pct + '%';
+}
+
+function toggleTask(taskId, dayId, tasks) {
+  state[taskId] = !state[taskId];
+  const cb = document.getElementById('cb-' + taskId);
+  const tt = document.getElementById('tt-' + taskId);
+  if (cb) { cb.classList.toggle('done', state[taskId]); cb.textContent = state[taskId] ? '✓' : ''; }
+  if (tt) tt.classList.toggle('done', state[taskId]);
+  updateDayMini(dayId, tasks);
+  updateGlobalBar();
+  saveState();
+}
+
+function renderAll() {
+  const root = document.getElementById('cl-root');
+  root.innerHTML = '';
+
+  DATA.forEach(phase => {
+    const sep = document.createElement('div');
+    sep.className = 'phase-sep';
+    sep.innerHTML = `<span class="ph-num">${phase.phase}</span><span class="ph-title">${phase.phaseTitle}</span><div class="ph-line"></div>`;
+    root.appendChild(sep);
+
+    phase.days.forEach(day => {
+      const block = document.createElement('div');
+      block.className = 'day-block';
+
+      const pillClass = day.deadline ? (day.date.includes('PROTOTYPE') ? 'p4c deadline-pill' : 'bufc deadline-pill') : phase.pill;
+      const hdr = document.createElement('div');
+      hdr.className = 'day-hdr';
+      const doneCnt = day.tasks.filter(t => state[t.id]).length;
+      const totCnt = day.tasks.length;
+      const pct = totCnt ? Math.round(doneCnt / totCnt * 100) : 0;
+      hdr.innerHTML = `
+        <span class="dpill ${pillClass}">${day.date}</span>
+        <div class="day-theme">${day.theme}</div>
+        <div class="day-right">
+          <span class="prog-txt" id="prog-${day.id}">${doneCnt}/${totCnt}</span>
+          <div class="mini-prog"><div class="mini-fill" id="mini-${day.id}" style="width:${pct}%"></div></div>
+          <span class="chev" id="chev-${day.id}">▾</span>
+        </div>`;
+      block.appendChild(hdr);
+
+      if (day.modules && day.modules.length) {
+        const mt = document.createElement('div');
+        mt.className = 'mod-tags';
+        mt.id = 'mt-' + day.id;
+        mt.style.display = 'none';
+        day.modules.forEach(m => { mt.innerHTML += `<span class="mtag">${m}</span>`; });
+        block.appendChild(mt);
+      }
+
+      const tbody = document.createElement('div');
+      tbody.className = 'tasks-body';
+      tbody.id = 'tb-' + day.id;
+      tbody.style.display = 'none';
+
+      day.tasks.forEach(task => {
+        const row = document.createElement('div');
+        row.className = 'task-row';
+        const isDone = !!state[task.id];
+        row.innerHTML = `
+          <div class="tcb${isDone ? ' done' : ''}" id="cb-${task.id}">${isDone ? '✓' : ''}</div>
+          <div style="flex:1;min-width:0">
+            <div class="ttext${isDone ? ' done' : ''}" id="tt-${task.id}">${task.t}</div>
+            ${task.o ? `<div class="tout">→ ${task.o}</div>` : ''}
+          </div>`;
+        row.addEventListener('click', () => toggleTask(task.id, day.id, day.tasks));
+        tbody.appendChild(row);
+      });
+      block.appendChild(tbody);
+
+      const dv = document.createElement('div');
+      dv.className = 'deliv-bar';
+      dv.id = 'dv-' + day.id;
+      dv.style.display = 'none';
+      const isHero = day.deliv.includes('READY') || day.deliv.includes('DELIVERED');
+      dv.innerHTML = `<span class="deliv-arrow">${isHero ? '★' : '→'}</span><div class="deliv-txt">${isHero ? '<b>' + day.deliv + '</b>' : day.deliv}</div>`;
+      block.appendChild(dv);
+
+      let open = false;
+      hdr.addEventListener('click', () => {
+        open = !open;
+        tbody.style.display = open ? 'block' : 'none';
+        dv.style.display = open ? 'flex' : 'none';
+        const mt = document.getElementById('mt-' + day.id);
+        if (mt) mt.style.display = open ? 'flex' : 'none';
+        const chev = document.getElementById('chev-' + day.id);
+        if (chev) chev.classList.toggle('open', open);
+      });
+
+      root.appendChild(block);
+    });
+  });
+
+  updateGlobalBar();
+}
+
+loadState();
+</script>

@@ -1,0 +1,461 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);background:transparent;color:var(--color-text-primary)}
+
+.wrap{padding:0 0 2rem}
+
+/* TOP HEADER */
+.top-header{margin-bottom:20px;padding-bottom:16px;border-bottom:0.5px solid var(--color-border-tertiary)}
+.product-tag{display:inline-block;font-size:10px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;background:var(--color-background-secondary);color:var(--color-text-secondary);padding:4px 10px;border-radius:4px;margin-bottom:8px}
+.top-header h1{font-size:18px;font-weight:500;color:var(--color-text-primary);margin-bottom:4px}
+.top-header p{font-size:12px;color:var(--color-text-secondary)}
+
+/* PHASE BOUNDARIES */
+.phase-block{margin-bottom:28px}
+.phase-label{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.phase-num{font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary)}
+.phase-title{font-size:13px;font-weight:500;color:var(--color-text-primary)}
+.phase-bar{flex:1;height:0.5px;background:var(--color-border-tertiary)}
+
+/* DAY BLOCK */
+.day-block{margin-bottom:12px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden}
+.day-header{display:flex;align-items:center;gap:12px;padding:10px 14px;background:var(--color-background-secondary);cursor:pointer;user-select:none}
+.day-header:hover{background:var(--color-background-tertiary)}
+.day-pill{font-size:10px;font-weight:700;padding:3px 9px;border-radius:20px;flex-shrink:0}
+.day-title{font-size:13px;font-weight:500;color:var(--color-text-primary);flex:1}
+.day-theme{font-size:11px;color:var(--color-text-secondary)}
+.day-prog{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.prog-count{font-size:11px;color:var(--color-text-tertiary)}
+.chevron{font-size:12px;color:var(--color-text-tertiary);transition:transform 0.2s;flex-shrink:0}
+.chevron.open{transform:rotate(180deg)}
+
+/* MODULE TAGS */
+.mod-tags{display:flex;flex-wrap:wrap;gap:4px;padding:8px 14px;border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-primary)}
+.mod-tag{font-size:10px;font-weight:500;padding:2px 8px;border-radius:20px;border:0.5px solid var(--color-border-tertiary);color:var(--color-text-secondary)}
+
+/* TASKS LIST */
+.tasks-list{padding:6px 14px 10px}
+.task-item{display:flex;align-items:flex-start;gap:10px;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary);cursor:pointer}
+.task-item:last-child{border-bottom:none}
+.task-item:hover .task-text{color:var(--color-text-primary)}
+.task-cb{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--color-border-secondary);flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all 0.15s}
+.task-cb.done{background:var(--color-background-success);border-color:var(--color-border-success)}
+.task-cb.done::after{content:'✓';font-size:9px;font-weight:700;color:var(--color-text-success)}
+.task-text{font-size:12px;color:var(--color-text-secondary);line-height:1.5;transition:color 0.15s}
+.task-text.done{text-decoration:line-through;opacity:0.5}
+.task-output{font-size:10px;color:var(--color-text-tertiary);margin-top:2px}
+
+/* DELIVERABLE */
+.deliverable-bar{display:flex;align-items:flex-start;gap:8px;padding:8px 14px;background:var(--color-background-secondary);border-top:0.5px solid var(--color-border-tertiary)}
+.deliv-icon{font-size:11px;flex-shrink:0;margin-top:1px}
+.deliv-text{font-size:11px;color:var(--color-text-secondary);line-height:1.4}
+.deliv-text b{color:var(--color-text-primary);font-weight:500}
+
+/* BUFFER DAYS */
+.buffer-block{border:0.5px solid var(--color-border-tertiary);border-radius:10px;overflow:hidden;margin-bottom:8px}
+.buffer-header{display:flex;align-items:center;gap:10px;padding:10px 14px;cursor:pointer;background:var(--color-background-secondary)}
+.buffer-header:hover{background:var(--color-background-tertiary)}
+
+/* GLOBAL PROGRESS */
+.global-prog{display:flex;align-items:center;gap:14px;margin-bottom:20px;padding:12px 16px;background:var(--color-background-secondary);border-radius:10px;flex-wrap:wrap}
+.gp-label{font-size:11px;color:var(--color-text-secondary)}
+.gp-bar-wrap{flex:1;min-width:120px;height:6px;background:var(--color-border-tertiary);border-radius:3px;overflow:hidden}
+.gp-bar{height:100%;border-radius:3px;background:var(--color-background-success);transition:width 0.4s}
+.gp-count{font-size:12px;font-weight:500;color:var(--color-text-primary);min-width:40px;text-align:right}
+
+/* WHAT IS OUT */
+.out-block{margin-top:20px;border:0.5px solid var(--color-border-tertiary);border-radius:10px;padding:14px}
+.out-title{font-size:12px;font-weight:500;color:var(--color-text-secondary);margin-bottom:8px}
+.out-item{display:flex;gap:8px;font-size:11px;color:var(--color-text-tertiary);padding:3px 0;line-height:1.4}
+.out-x{color:var(--color-text-danger);font-size:11px;flex-shrink:0}
+
+/* DEAL CARD */
+.deal-card{display:flex;flex-wrap:wrap;gap:8px;padding:10px 14px;background:var(--color-background-secondary);border-radius:8px;margin-bottom:20px}
+.deal-field{display:flex;flex-direction:column;gap:2px}
+.deal-key{font-size:10px;color:var(--color-text-tertiary);text-transform:uppercase;letter-spacing:0.05em;font-weight:600}
+.deal-val{font-size:12px;font-weight:500;color:var(--color-text-primary)}
+
+/* COLORS PER PHASE */
+.pill-p1{background:#E1F5EE;color:#0F6E56}
+.pill-p2{background:#E6F1FB;color:#185FA5}
+.pill-p3{background:#E8E2F7;color:#5B3D9E}
+.pill-p4{background:#FAEEDA;color:#854F0B}
+.pill-buf{background:#F1EFE8;color:#5F5E5A}
+
+</style>
+
+<div class="wrap">
+  <h2 class="sr-only">AcquireOS AI MVP Sprint Checklist — May 8 to May 20, 2026</h2>
+
+  <!-- HEADER -->
+  <div class="top-header">
+    <div class="product-tag">AcquireOS AI™ · MVP Sprint</div>
+    <h1>Prototype Build Checklist</h1>
+    <p>Frontend-only React prototype · Prototype deadline May 15 · Hard deadline May 20</p>
+  </div>
+
+  <!-- SAMPLE DEAL -->
+  <div style="margin-bottom:8px;font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--color-text-tertiary)">Demo deal — runs through all modules</div>
+  <div class="deal-card">
+    <div class="deal-field"><div class="deal-key">Property</div><div class="deal-val">Sunset Apartments</div></div>
+    <div class="deal-field"><div class="deal-key">Location</div><div class="deal-val">Dallas, Texas</div></div>
+    <div class="deal-field"><div class="deal-key">Units</div><div class="deal-val">120 · Multifamily</div></div>
+    <div class="deal-field"><div class="deal-key">Asking Price</div><div class="deal-val">$12,900,000</div></div>
+    <div class="deal-field"><div class="deal-key">NOI</div><div class="deal-val">$775,000</div></div>
+    <div class="deal-field"><div class="deal-key">Purpose</div><div class="deal-val">Flows through all 16 modules</div></div>
+  </div>
+
+  <!-- GLOBAL PROGRESS -->
+  <div class="global-prog">
+    <div class="gp-label">Overall progress</div>
+    <div class="gp-bar-wrap"><div class="gp-bar" id="global-bar" style="width:0%"></div></div>
+    <div class="gp-count" id="global-count">0 / 0</div>
+  </div>
+
+  <div id="checklist-root"></div>
+</div>
+
+<script>
+const PHASES = [
+  {
+    id:'p1', label:'Phase 1', title:'Foundation', pill:'pill-p1',
+    days:[
+      {
+        date:'May 8 — Fri', theme:'User Roles · Dashboard · Deal Intake · Parsed Data Review',
+        modules:['User Roles & Permissions','Deal Dashboard','Deal Intake','Parsed Data Review'],
+        tasks:[
+          {t:'Build login / role selector screen (Buyer / Seller / Admin)',o:'Role-based UI loads correctly'},
+          {t:'Build main Dashboard layout — pipeline bar + KPI card shells',o:'Dashboard visible in browser'},
+          {t:'Build drag & drop upload UI (mock — no real storage)',o:'User can "upload" 3 mock files'},
+          {t:'Build Parsed Data tabs with editable fields',o:'Extracted fields visible and editable'},
+          {t:'Add confidence score indicators per field',o:'Each field shows a mock confidence %'},
+          {t:'Add Approve / Reject button for Admin role',o:'Admin can approve a deal'},
+        ],
+        deliverable:'Working role-based dashboard + deal upload + parsed data review UI'
+      },
+    ]
+  },
+  {
+    id:'p2', label:'Phase 2', title:'Core Intelligence Engine', pill:'pill-p2',
+    days:[
+      {
+        date:'May 9 — Sat', theme:'AI Underwriting Engine · Assumptions Editor · Stress Test',
+        modules:['AI Underwriting Engine (M4)','Assumptions Editor','Stress Test'],
+        tasks:[
+          {t:'Build underwriting results screen — NOI, Cap Rate, DSCR, CoC, IRR cards',o:'8 metrics visible with mock values'},
+          {t:'Build 10-year cash flow proforma table (mock data)',o:'Year-by-year projection table rendered'},
+          {t:'Build Assumptions Editor — sliders / inputs that live-recalculate metrics',o:'Change a slider → numbers update instantly'},
+          {t:'Build Stress Test tab — Best / Base / Worst scenario cards',o:'3 scenario cards visible side by side'},
+          {t:'Add breakpoint alerts (e.g. DSCR below 1.2 warning)',o:'Warning badge fires on relevant threshold'},
+          {t:'Add basic bar/line chart for scenario comparison (Recharts)',o:'Chart renders with mock scenario data'},
+        ],
+        deliverable:'Assumptions editor + stress test working end-to-end with mock logic'
+      },
+      {
+        date:'May 10 — Sun', theme:'Deal Score & Verdict · Market Intelligence',
+        modules:['Deal Score & Verdict (M5)','Market Intelligence (M2)'],
+        tasks:[
+          {t:'Build Deal Score gauge — 0-100 visual dial or score card',o:'78/100 score displays'},
+          {t:'Build Verdict banner (green/yellow/red) with plain-English text',o:'Verdict: "Strong potential with manageable risks"'},
+          {t:'Build Resilience Score indicator',o:'Stress resilience score visible'},
+          {t:'Build Strengths list — green checkmarks (mock AI output)',o:'3–5 strengths listed'},
+          {t:'Build Risks list — warning icons (mock AI output)',o:'3–5 risks listed'},
+          {t:'Build Recommended Offer section — Base / Aggressive / Safe cards',o:'3 offer scenarios with price ranges'},
+          {t:'Build Market Intelligence screen — 50-state score cards + ranking table',o:'State rankings visible with mock data'},
+        ],
+        deliverable:'Full deal score + multi-scenario offer + market view live'
+      },
+      {
+        date:'May 11 — Mon', theme:'Lender Match Engine · Loan Package Generator',
+        modules:['Lender Match Engine (M6)','Loan Package Generator (M7)'],
+        tasks:[
+          {t:'Build Lender Match cards — fit score + rule chips per lender',o:'Top 5 lenders ranked with scores'},
+          {t:'Add Best Fit Loan highlight card (LTV, Rate, Closing speed)',o:'"Best Fit: Bridge 75% LTV 8.50%" displayed'},
+          {t:'"Why This Loan?" explanation block (mock AI paragraph)',o:'Plain-English reason visible'},
+          {t:'Add Lender detail modal on click',o:'Lender detail expands correctly'},
+          {t:'Build Loan Package preview — all 10 sections visible',o:'Exec Summary, T12, Market Overview etc. rendered'},
+          {t:'Add mock Download PDF button',o:'Button present — shows success toast on click'},
+        ],
+        deliverable:'Lender recommendations + loan package preview working'
+      },
+    ]
+  },
+  {
+    id:'p3', label:'Phase 3', title:'Execution & Documents', pill:'pill-p3',
+    days:[
+      {
+        date:'May 12 — Tue', theme:'LOI Generator · Outreach & Communication',
+        modules:['LOI Generator (M10)','Outreach & Communication (M8)'],
+        tasks:[
+          {t:'Build LOI form — auto-filled fields (Purchase Price, EMD, DD Period, Closing Timeline)',o:'All LOI fields pre-populated from mock deal data'},
+          {t:'Add AI term suggestion tooltips per field (mock)',o:'Suggestions appear next to relevant fields'},
+          {t:'Build LOI live preview panel',o:'Preview updates as user edits fields'},
+          {t:'Add Version History list + "Save New Version" button',o:'Version history saves and lists correctly'},
+          {t:'Add mock PDF Download button for LOI',o:'One-click download triggers toast'},
+          {t:'Build Outreach screen — Email / SMS / Call Script channel selector',o:'Three-panel UI with channel toggle'},
+          {t:'Add mock generated message panel with edit capability',o:'Message appears and is editable'},
+          {t:'Add Template Save + Template Library screen',o:'Templates saved and browsable'},
+        ],
+        deliverable:'LOI with versioning feel + outreach templates ready'
+      },
+      {
+        date:'May 13 — Wed', theme:'Actions & Follow-up · Pipeline · Activity Log',
+        modules:['Actions & Follow-up (M9)','Pipeline','Activity Log'],
+        tasks:[
+          {t:'Build AI Next Best Actions task list — priority badges (High / Medium / Low)',o:'6–8 prioritised tasks visible'},
+          {t:'Add Deal Momentum Score indicator',o:'"72/100 Good Momentum" shown'},
+          {t:'Build Kanban pipeline board — drag & drop between stages',o:'Deal cards draggable across columns'},
+          {t:'Build per-deal Task list with status toggle (Pending / In Progress / Done)',o:'Tasks check off correctly'},
+          {t:'Build Activity Log timeline — actions recorded as user progresses',o:'Timeline entries appear as tasks complete'},
+          {t:'Add Notes / Comments section per deal',o:'User can add and save a note'},
+        ],
+        deliverable:'Functional pipeline + tasks + activity log all connected'
+      },
+    ]
+  },
+  {
+    id:'p4', label:'Phase 4', title:'Post-LOI · Closing · Polish', pill:'pill-p4',
+    days:[
+      {
+        date:'May 14 — Thu', theme:'PSA Assistant · Escrow Tracker · Due Diligence · Financing & Closing',
+        modules:['PSA Assistant (M11)','Escrow Tracker (M12)','Due Diligence (M13)','Financing & Closing (M14)'],
+        tasks:[
+          {t:'Build PSA template selector (Standard / Value-Add / Stabilized)',o:'Correct template auto-selects based on deal type'},
+          {t:'Build PSA draft screen — all 9 sections populated from mock deal data',o:'No blank PSA fields in demo'},
+          {t:'Add AI risk flag banners on relevant PSA sections (yellow warnings)',o:'Flags appear in relevant sections'},
+          {t:'Add mock Word .docx Download button for PSA',o:'Export button present with disclaimer text'},
+          {t:'Build Escrow Tracker 6-step Title Company wizard simulator',o:'Open Escrow → Title Search → Clear → Closing Prep → Signing → Post-Closing'},
+          {t:'Add circular progress indicator + milestone table (color-coded)',o:'60% progress shown with green/orange/gray states'},
+          {t:'Add delay prediction alert for overdue milestones',o:'Alert fires when milestone exceeds benchmark'},
+          {t:'Build Due Diligence checklist — 9 items with status toggle + progress ring',o:'72% complete shown for demo deal'},
+          {t:'Build Financing & Closing progress screen — 6 steps with Closing Readiness Score',o:'67% progress, key loan summary visible'},
+        ],
+        deliverable:'PSA + full title company simulation + DD + closing flow complete'
+      },
+      {
+        date:'May 15 — Fri · PROTOTYPE DEADLINE', theme:'Asset Plan · Exit Strategy · Full Integration + Polish',
+        modules:['Asset Plan & Hold (M15)','Exit Strategy (M16)','Full Integration'],
+        tasks:[
+          {t:'Build Asset Plan screen — 4 KPI progress bars + NOI Growth line chart',o:'CapEx 65%, Rents 70%, Expenses 60%, Mgmt 85%'},
+          {t:'Build Exit Strategy screen — 4 scenario cards (Sell / Refi / 1031 / Hold)',o:'Each card shows IRR + Equity Multiple + Net Proceeds'},
+          {t:'Add AI Recommended Exit banner (mock)',o:'"Sell in Year 4" recommendation displayed'},
+          {t:'Connect all screens end-to-end — navigation flows without breaks',o:'Full deal journey works without any module crashing'},
+          {t:'Wire Dashboard KPI cards to mock global deal data',o:'48 deals, $78.4M total value, 6.45% avg cap rate shown'},
+          {t:'Load Sunset Apartments demo deal — all 16 modules show coherent data',o:'One deal flows through the entire platform cleanly'},
+          {t:'Final UI consistency pass — spacing, typography, color, loading states',o:'No broken layouts or mismatched styles'},
+          {t:'Responsive check — key screens work on smaller viewports',o:'Nothing breaks at 1024px'},
+        ],
+        deliverable:'PROTOTYPE READY — Complete end-to-end demoable React app · All 16 modules + Dashboard'
+      },
+    ]
+  },
+  {
+    id:'buf', label:'Buffer', title:'Polish · Test · Deliver', pill:'pill-buf',
+    days:[
+      {
+        date:'May 16 — Sat · Buffer 1', theme:'UI / UX Polish & Consistency',
+        modules:[],
+        tasks:[
+          {t:'Design consistency pass across all screens',o:''},
+          {t:'Add loading states and skeleton screens',o:''},
+          {t:'Improve micro-interactions and hover states',o:''},
+          {t:'Fix any mobile / responsive edge cases',o:''},
+        ],
+        deliverable:'Noticeably cleaner, more polished UI'
+      },
+      {
+        date:'May 17 — Sun · Buffer 2', theme:'Performance + Bug Fixing',
+        modules:[],
+        tasks:[
+          {t:'Fix all issues surfaced during May 15 prototype demo',o:''},
+          {t:'Optimise slow-rendering screens',o:''},
+          {t:'Add error handling and empty state screens',o:''},
+          {t:'Cross-browser check (Chrome + Safari)',o:''},
+        ],
+        deliverable:'Stable, fast, crash-free app'
+      },
+      {
+        date:'May 18 — Mon · Buffer 3', theme:'Documentation + Demo Video',
+        modules:[],
+        tasks:[
+          {t:'Write user guide covering all 16 modules',o:''},
+          {t:'Record Loom walkthrough video of full prototype',o:''},
+          {t:'Write component notes for dev handoff',o:''},
+        ],
+        deliverable:'Professional documentation + demo video ready'
+      },
+      {
+        date:'May 19 — Tue · Buffer 4', theme:'Final Testing + Client Feedback',
+        modules:[],
+        tasks:[
+          {t:'Full regression test — every module, every interaction',o:''},
+          {t:'Incorporate feedback from May 15 prototype presentation',o:''},
+          {t:'Final accessibility check',o:''},
+        ],
+        deliverable:'Bug-free, client-feedback-incorporated version'
+      },
+      {
+        date:'May 20 — Wed · HARD DEADLINE', theme:'Final Delivery & Presentation',
+        modules:[],
+        tasks:[
+          {t:'Production deploy (Vercel + any hosting)',o:''},
+          {t:'Final client presentation — walk through all 16 modules with Sunset Apartments',o:''},
+          {t:'Project handover — live URL, credentials, documentation',o:''},
+        ],
+        deliverable:'FINAL MVP DELIVERED — Live, polished, fully demoable'
+      },
+    ]
+  }
+];
+
+const NOT_BUILDING = [
+  'Real broker email integration (Gmail/Outlook)',
+  'Live real estate listing API connections (CREXi/LoopNet)',
+  'DocuSign / e-signature integration',
+  'Real lender API connections or rate feeds',
+  'Native mobile application',
+  'Multi-user collaboration features',
+  'Automated task completion detection',
+];
+
+const KEY_RULE = 'Every feature we build must work end-to-end and be demonstrable. No half-built features. If we build it, it must run. If we cannot finish it fully, we show a clean placeholder screen — not broken code.';
+
+function buildChecklist(){
+  const root = document.getElementById('checklist-root');
+  let allTasks = [];
+
+  PHASES.forEach(phase => {
+    const pb = document.createElement('div');
+    pb.className = 'phase-block';
+
+    const pl = document.createElement('div');
+    pl.className = 'phase-label';
+    pl.innerHTML = `<span class="phase-num">${phase.label}</span><span class="phase-title">${phase.title}</span><div class="phase-bar"></div>`;
+    pb.appendChild(pl);
+
+    phase.days.forEach((day, di) => {
+      const dayId = `${phase.id}-d${di}`;
+      const db = document.createElement('div');
+      db.className = 'day-block';
+
+      // header
+      const dh = document.createElement('div');
+      dh.className = 'day-header';
+      const isDeadline = day.date.includes('PROTOTYPE') || day.date.includes('HARD DEADLINE');
+      const pillClass = isDeadline ? (day.date.includes('PROTOTYPE') ? 'pill-p4' : 'pill-buf') : phase.pill;
+      dh.innerHTML = `
+        <span class="day-pill ${pillClass}">${day.date}</span>
+        <div style="flex:1;min-width:0">
+          <div class="day-title">${day.theme}</div>
+        </div>
+        <div class="day-prog"><span class="prog-count" id="prog-${dayId}">0/${day.tasks.length}</span></div>
+        <span class="chevron" id="chev-${dayId}">▾</span>`;
+      db.appendChild(dh);
+
+      // module tags
+      if(day.modules.length){
+        const mt = document.createElement('div');
+        mt.className = 'mod-tags';
+        day.modules.forEach(m => {
+          mt.innerHTML += `<span class="mod-tag">${m}</span>`;
+        });
+        db.appendChild(mt);
+      }
+
+      // tasks
+      const tl = document.createElement('div');
+      tl.className = 'tasks-list';
+      tl.id = `tl-${dayId}`;
+
+      day.tasks.forEach((task, ti) => {
+        const taskId = `${dayId}-t${ti}`;
+        allTasks.push(taskId);
+        const ti_el = document.createElement('div');
+        ti_el.className = 'task-item';
+        ti_el.id = `task-${taskId}`;
+        ti_el.innerHTML = `
+          <div class="task-cb" id="cb-${taskId}"></div>
+          <div style="flex:1;min-width:0">
+            <div class="task-text" id="tt-${taskId}">${task.t}</div>
+            ${task.o ? `<div class="task-output">→ ${task.o}</div>` : ''}
+          </div>`;
+        ti_el.addEventListener('click', () => toggleTask(taskId, dayId, day.tasks.length));
+        tl.appendChild(ti_el);
+      });
+
+      db.appendChild(tl);
+
+      // deliverable
+      const dv = document.createElement('div');
+      dv.className = 'deliverable-bar';
+      const isDone = day.deliverable.includes('READY') || day.deliverable.includes('DELIVERED');
+      dv.innerHTML = `<span class="deliv-icon">${isDone ? '★' : '→'}</span><div class="deliv-text">${isDone ? '<b>' + day.deliverable + '</b>' : day.deliverable}</div>`;
+      db.appendChild(dv);
+
+      // collapse toggle
+      let open = false;
+      tl.style.display = 'none';
+      if(day.modules.length) db.querySelector('.mod-tags').style.display = 'none';
+      dv.style.display = 'none';
+
+      dh.addEventListener('click', () => {
+        open = !open;
+        const tl_el = document.getElementById(`tl-${dayId}`);
+        const mt_el = db.querySelector('.mod-tags');
+        const ch = document.getElementById(`chev-${dayId}`);
+        tl_el.style.display = open ? 'block' : 'none';
+        if(mt_el) mt_el.style.display = open ? 'flex' : 'none';
+        dv.style.display = open ? 'flex' : 'none';
+        ch.classList.toggle('open', open);
+      });
+
+      pb.appendChild(db);
+    });
+
+    root.appendChild(pb);
+  });
+
+  // Key rule
+  const ruleEl = document.createElement('div');
+  ruleEl.style = 'border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 14px;margin-bottom:20px;background:var(--color-background-secondary)';
+  ruleEl.innerHTML = `<div style="font-size:10px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;color:var(--color-text-tertiary);margin-bottom:6px">The one rule for this sprint</div><div style="font-size:12px;color:var(--color-text-secondary);line-height:1.6">${KEY_RULE}</div>`;
+  root.appendChild(ruleEl);
+
+  // Not building
+  const nb = document.createElement('div');
+  nb.className = 'out-block';
+  nb.innerHTML = `<div class="out-title">Explicitly out of scope for this prototype</div>`;
+  NOT_BUILDING.forEach(item => {
+    nb.innerHTML += `<div class="out-item"><span class="out-x">✗</span>${item}</div>`;
+  });
+  root.appendChild(nb);
+
+  window._allTasks = allTasks;
+  updateGlobal();
+}
+
+function toggleTask(taskId, dayId, total){
+  const cb = document.getElementById(`cb-${taskId}`);
+  const tt = document.getElementById(`tt-${taskId}`);
+  const done = cb.classList.toggle('done');
+  tt.classList.toggle('done', done);
+  updateDayProg(dayId, total);
+  updateGlobal();
+}
+
+function updateDayProg(dayId, total){
+  const tl = document.getElementById(`tl-${dayId}`);
+  const done = tl.querySelectorAll('.task-cb.done').length;
+  document.getElementById(`prog-${dayId}`).textContent = `${done}/${total}`;
+}
+
+function updateGlobal(){
+  const all = document.querySelectorAll('.task-cb').length;
+  const done = document.querySelectorAll('.task-cb.done').length;
+  document.getElementById('global-count').textContent = `${done} / ${all}`;
+  document.getElementById('global-bar').style.width = all ? Math.round(done/all*100)+'%' : '0%';
+}
+
+buildChecklist();
+</script>
